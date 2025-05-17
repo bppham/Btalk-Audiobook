@@ -1,0 +1,230 @@
+.employee-list{
+    flex: 4;
+    margin: 10px;
+}
+
+.employee-list-header{
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 10px 30px;
+}
+
+.employee-list-header .title {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.employee-list-header .title .action{
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.employee-list-header .title input, select{
+    padding: 5px 20px;
+    border: 1px solid rgb(197, 188, 188);
+    border-radius: 2px;
+    width: 200px;
+}
+
+.employee-list-header .add button{
+    background-color: #0d6efd;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+
+.employee-list-header .add button:hover{
+    background-color: #428bfa;
+}
+
+.employee-list-container table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.employee-list-container table img{
+    width: 50px;
+    height: 50px;
+    object-fit: fill;
+    border-radius: 50%;
+}
+
+.employee-list-container table th, td{
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.employee-list-container table tr:hover{
+    background-color: rgb(245, 241, 241);
+}
+
+.employee-list-container table .action{
+    display: flex;
+    gap: 15px;
+}
+
+.employee-list-container table .action button{
+    color: white;
+    padding: 7px 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+}
+
+.employee-list-container table .action .update{
+    background-color: #198754;
+}
+
+.employee-list-container table .action .update:hover{
+    background-color: rgb(45, 145, 98);
+}
+
+
+.employee-list-container table .action .delete{
+    background-color: #dc3545;
+}
+
+.employee-list-container table .action .delete:hover{
+    background-color: #e05160;
+}
+
+/* Popup */
+
+.employee-list .add-model-overplay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.employee-list .model {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 50%;
+    max-width: 600px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.employee-list .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.employee-list .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.employee-list .item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.employee-list label{
+    font-weight: bold;
+}
+
+.employee-list .full-width {
+    width: 100%;
+}
+
+.employee-list textarea {
+    resize: none;
+    width: 100%;
+}
+
+.image-preview {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.image-preview img {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    padding: 5px;
+}
+
+.employee-list .employee-list-container .action{
+    display: flex;
+    gap: 10px;
+}
+
+.employee-list .employee-list-container .action button{
+    padding: 7px 10px;
+    color: white;
+    cursor: pointer;
+}
+
+.employee-list .employee-list-container .action button:first-child{
+    background-color: #198754;
+}
+
+.employee-list .employee-list-container .action button:first-child:hover{
+    background-color: #288d5e;
+}
+
+.employee-list .employee-list-container .action button:nth-child(2){
+    background-color: #dc3545;
+}
+
+.employee-list .employee-list-container .action button:nth-child(2):hover{
+    background-color: #d34957;
+}
+
+
+.employee-list .employee-list-container .action button:last-child{
+    background-color: #0dcaf0;
+}
+
+.employee-list .employee-list-container .action button:last-child:hover{
+    background-color: #01c6ee;
+}
+
+.employee-list .pagination{
+    margin: 50px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.employee-list .pagination button{
+    background-color: #ffffff;
+    width: 80px;
+    padding: 5px 10px;
+    color: red;
+    border: 1px solid rgb(163, 161, 161);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.employee-list .pagination button:hover{
+    background-color: rgb(248, 248, 248)
+}

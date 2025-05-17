@@ -1,0 +1,251 @@
+.verify-code-admin {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../../../assets/background-admin-login.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.verify-code-admin .verify-code-container {
+  width: 80%;
+  height: 70%;
+  background-color: white;
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+}
+
+.verify-code-admin .verify-code-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  border-right: 1px solid #ccc;
+  padding: 10px;
+}
+
+.verify-code-admin .verify-code-info h3 {
+  font-style: italic;
+  color: #3366ff;
+  margin-top: 5px;
+}
+
+.verify-code-admin .verify-code-info .info-description {
+  list-style: disc;
+  font-style: italic;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.verify-code-admin .verify-code-info img {
+  width: 350px;
+  height: 250px;
+}
+
+.verify-code-admin .verify-code-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.verify-code-admin .verify-code-section h2 {
+  color: #3366ff;
+}
+
+.verify-code-admin .verify-code-section .verify-code-section-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+}
+
+
+.verify-code-admin
+  .verify-code-section
+  .verify-code-section-container
+  label {
+  font-size: 18px;
+  font-weight: bold;
+  color: #3366ff;
+}
+
+.verify-code-admin
+  .verify-code-section
+  .verify-code-section-container
+  .item
+  input {
+  width: 90%;
+  height: 30px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 5px 10px;
+}
+
+.verify-code-admin
+  .verify-code-section
+  .verify-code-section-container
+  .item
+  .password-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.verify-code-admin
+  .verify-code-section
+  .verify-code-section-container
+  .item
+  .password-container
+  input {
+  flex: 1;
+  padding-right: 30px; /* Tạo khoảng trống cho icon */
+}
+
+.verify-code-admin
+  .verify-code-section
+  .verify-code-section-container
+  .item
+  .eye-icon {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #666;
+  font-size: 18px;
+}
+
+.verify-code-admin
+  .verify-code-section
+  .verify-code-section-container
+  .verify-code-item {
+  color: #3366ff;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  width: 100%;
+  font-weight: 520;
+  font-style: italic;
+  font-size: 17px;
+  margin-top: 30px;
+}
+
+.verify-code-admin
+  .verify-code-section
+  .verify-code-section-container
+  .verify-code-item
+  p:hover {
+  color: #1649e2;
+  cursor: pointer;
+}
+
+.verify-code-admin .verify-code-section .verify-code-action button {
+  background-color: #3366ff;
+  width: 200px;
+  height: 50px;
+  font-size: 20px;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 25px;
+}
+
+.verify-code-admin .verify-code-section .verify-code-action button:hover {
+  background-color: #507af8;
+  cursor: pointer;
+}
+
+.verify-otp-card {
+  padding: 2rem;
+  text-align: center;
+  width: 400px;
+}
+
+.verify-otp-card h3 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #3366ff;
+}
+
+.verify-otp-card p {
+  font-size: 16px;
+  color: #746c6c;
+  margin-bottom: 20px;
+}
+
+/* OTP Input Group */
+.otp-input-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.otp-input {
+  width: 45px;
+  height: 50px;
+  text-align: center;
+  font-size: 24px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.otp-input:focus {
+  border-color: #3366ff;
+  box-shadow: 0 0 8px rgba(125, 60, 255, 0.5);
+}
+
+/* Verify Button */
+.verify-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: white;
+  background-color: #3366ff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.verify-btn:hover {
+  background-color: #285dfc;
+}
+
+/* Resend Options */
+.resend-options {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #333;
+}
+
+.resend-options a {
+  color: #3366ff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.resend-options a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}

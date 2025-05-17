@@ -1,0 +1,25 @@
+.rating-component {
+    display: flex;
+    gap: 5px;
+}
+  
+.star-wrapper {
+    cursor: pointer;
+    font-size: 24px;
+    transition: color 0.3s;
+}
+  
+.star-icon {
+    color: gold;
+}
+  
+.star-wrapper:hover .star-icon,
+.star-wrapper .star-icon.filled {
+    color: gold;
+}
+  
+.rating-text {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #333;
+  }

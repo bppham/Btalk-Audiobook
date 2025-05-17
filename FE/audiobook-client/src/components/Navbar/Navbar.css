@@ -1,0 +1,87 @@
+.navbar{
+    width: 100%;
+    height: 80px;
+    background: #0f2027; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #0f2027, #203a43, #2c5364); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364); 
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    display: flex;
+}
+
+.navbar-left{
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    width: 200px;
+}
+
+.navbar-center{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.navbar-center input{
+    flex: 1;
+    height: 36px;
+    padding: 10px 10px;
+    font-size: 16px;
+    border-width: 1px;
+    border-style: 1px;
+    border-color: rgb(217, 212, 212);
+    border-radius: 20px 0px 0px 20px;
+    box-shadow: inset 1px 2px 3px rgba(0,0,0,0.15);
+    width: 0;
+}
+
+.navbar-center input::placeholder{
+    font-size: 18px;
+}
+
+.navbar-center button{
+    height: 36px;
+    width: 100px;
+    background-color: #0f2027;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 0px 20px 20px 0px;
+    margin-left: -1px;
+    margin-right: 20px;
+    position: relative;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.navbar-center button:hover{
+    background-color: #1b3a47;
+}
+
+.navbar-right {
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Hoặc center nếu muốn canh giữa */
+    gap: 30px; /* Điều chỉnh khoảng cách giữa các phần tử */
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+
+.navbar-right svg{
+    height: 30px;
+    cursor: pointer;
+}
+
+.navbar-right svg:hover{
+    color: white;
+}

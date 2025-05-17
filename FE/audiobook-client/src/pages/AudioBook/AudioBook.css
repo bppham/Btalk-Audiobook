@@ -1,0 +1,146 @@
+.audiobook{
+    flex: 1;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* quick-information */
+.audiobook .quick-information{
+    display: flex;
+    gap: 20px;
+}
+
+.audiobook .quick-information .book-cover{
+    flex: 1;
+}
+
+.audiobook .quick-information .book-cover img{
+    width: 100%;
+    object-fit: cover;
+}
+
+.audiobook .quick-information .info-container{
+    flex: 4;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5efef;
+}
+
+.audiobook .quick-information .info-container .info-section{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 5
+}
+
+.audiobook .quick-information .info-container .info-section .title{
+    margin-bottom: 5px;
+}
+
+.audiobook .quick-information .info-container .info-section .detail{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.audiobook .quick-information .info-container .info-section .detail .item{
+    display: flex;
+    gap: 10px;
+    font-size: 18px;
+}
+
+.audiobook .quick-information .info-container .info-section .detail label{
+    font-weight: bold;
+    color: #2c5364;
+    display: flex;
+    gap: 5px;
+}
+
+.audiobook .quick-information .info-container .action-section{
+    flex: 1;
+    align-items: center;
+    font-size: 20px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.audiobook .quick-information .info-container .action-section button{
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    gap: 10px;
+    background-color: #f5efef;
+    border: none;
+}
+
+.audiobook .quick-information .info-container .action-section button:hover{
+    cursor: pointer;
+    color: #2c5364;
+}
+
+/* rating */
+.rating{
+    display: flex;
+    gap: 50px;
+    padding: 5px 10px;
+}
+
+.rating .score-average{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rating .score-average .score{
+    padding: 5px;
+    background-color: #2c5364;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: 50%;
+}
+
+.rating .score-average .vote-count{
+    font-style: italic;
+}
+
+.rating .rating-section{
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.rating .rating-section .rating-text{
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+/* audio player */
+.audiobook-section{
+    display: flex;
+}
+
+/* description and note */
+.description-container , .note-container {
+    background-color: #f5efef;
+    border: none;
+}
+
+.description-container legend, .note-container legend{
+    color: #2c5364;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.description-container p, .note-container p{
+    font-size: 18px;
+}

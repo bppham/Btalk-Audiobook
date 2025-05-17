@@ -1,0 +1,149 @@
+.employee-add{
+    flex: 4;
+    margin: 10px;
+}
+
+.form-add-employee{
+    display: flex;
+    flex-direction: column;
+    margin: 20px 5px;
+}
+
+.form-add-employee .row{
+    display: flex;
+    justify-content: space-between;
+    gap: 10%;
+}
+
+.form-add-employee .row .item{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-add-employee .row label{
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 5px;
+    margin-top: 15px;
+}
+
+.form-add-employee .row input{
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding: 5px 10px;
+    font-size: 15px;
+}
+
+.form-add-employee .image-preview {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.form-add-employee .image-preview img {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    padding: 5px;
+}
+
+.form-add-employee .row .item textarea{
+    resize: none;
+    width: 100%;
+    height: 150px;
+}
+
+.form-add-employee .role-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.form-add-employee .role-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.form-add-employee .show-audio-preview{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-add-employee .show-audio-preview li{
+    font-size: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.form-add-employee .show-audio-preview li button{
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 6px;
+}
+
+.form-add-employee .show-audio-preview li button:hover{
+    background-color: #e9e9e9;
+}
+
+.employee-add .action{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.employee-add .action button{
+    font-size: 15px;
+    padding: 5px 10px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.employee-add .action button:first-child{
+    background-color: #0d6efd;
+}
+
+.employee-add .action button:first-child:hover{
+    background-color: #2179fd;
+}
+
+.employee-add .action button:last-child{
+    background-color: #dc3545;
+}
+
+.employee-add .action button:last-child:hover{
+    background-color: #da4352;
+}
+
+.form-add-employee .role-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.form-add-employee .role-table th,
+.form-add-employee .role-table td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.form-add-employee .role-table th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+}

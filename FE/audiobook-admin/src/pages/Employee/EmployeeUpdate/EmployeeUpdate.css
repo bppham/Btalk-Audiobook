@@ -1,0 +1,174 @@
+.employee-update{
+    flex: 4;
+}
+
+.form-update-employee{
+    display: flex;
+    flex-direction: column;
+    margin: 20px 5px;
+}
+
+.form-update-employee .row{
+    display: flex;
+    justify-content: space-between;
+    gap: 10%;
+}
+
+.form-update-employee .row .item{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-update-employee .row label{
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 5px;
+    margin-top: 15px;
+}
+
+.form-update-employee .row input{
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding: 5px 10px;
+    font-size: 15px;
+}
+
+.form-update-employee .image-preview {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.form-update-employee .image-preview img {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    padding: 5px;
+}
+
+.form-update-employee .row .item textarea{
+    resize: none;
+    width: 100%;
+    height: 150px;
+}
+
+.form-update-employee .role-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.form-update-employee .role-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.form-update-employee .audio-preview{
+    list-style: none;
+    font-size: 12px;
+    height: 200px;
+    overflow: scroll;
+}
+
+.form-update-employee .audio-preview ul{
+    list-style: none;
+    font-size: 12px;
+}
+
+.form-update-employee .audio-preview ul li{
+    display: flex;
+    gap: 10px;
+}
+
+.form-update-employee .audio-preview ul li .action{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-update-employee .audio-preview ul li .action button{
+    border: none;
+    border-radius: 50%;
+    padding: 5px;
+    background-color: white;
+}
+
+.form-update-employee .audio-preview ul li .action button:hover{
+    border: 1px solid;
+    border-radius: 50%;
+    padding: 5px;
+    background-color: rgb(236, 236, 236);
+}
+
+.form-update-employee .audio-preview ul li .audio-info{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-weight: bold;
+}
+
+.form-update-employee .audio-preview ul li .audio-info audio{
+    height: 40px;
+    width: 90%;
+    margin-bottom: 5px;
+}
+
+.employee-update .action{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.employee-update .action button{
+    font-size: 15px;
+    padding: 5px 10px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.employee-update .action button:first-child{
+    background-color: #0d6efd;
+}
+
+.employee-update .action button:first-child:hover{
+    background-color: #2179fd;
+}
+
+.employee-update .action button:last-child{
+    background-color: #dc3545;
+}
+
+.employee-update .action button:last-child:hover{
+    background-color: #da4352;
+}
+
+.form-update-employee .role-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.form-update-employee .role-table th,
+.form-update-employee .role-table td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.form-update-employee .role-table th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+}
+

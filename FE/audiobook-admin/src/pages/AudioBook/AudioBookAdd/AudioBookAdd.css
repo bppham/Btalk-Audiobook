@@ -1,0 +1,131 @@
+.audiobook-add{
+    flex: 4;
+    margin: 10px;
+}
+
+.form-add-audiobook{
+    display: flex;
+    flex-direction: column;
+    margin: 20px 5px;
+}
+
+.form-add-audiobook .row{
+    display: flex;
+    justify-content: space-between;
+    gap: 10%;
+}
+
+.form-add-audiobook .row .item{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-add-audiobook .row label{
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 5px;
+    margin-top: 15px;
+}
+
+.form-add-audiobook .row input{
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding: 5px 10px;
+    font-size: 15px;
+}
+
+.form-add-audiobook .image-preview {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.form-add-audiobook .image-preview img {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    padding: 5px;
+}
+
+.form-add-audiobook .row .item textarea{
+    resize: none;
+    width: 100%;
+    height: 150px;
+}
+
+.form-add-audiobook .category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.form-add-audiobook .category-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.form-add-audiobook .show-audio-preview{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-add-audiobook .show-audio-preview li{
+    font-size: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.form-add-audiobook .show-audio-preview li button{
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 6px;
+}
+
+.form-add-audiobook .show-audio-preview li button:hover{
+    background-color: #e9e9e9;
+}
+
+.audiobook-add .action{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.audiobook-add .action button{
+    font-size: 15px;
+    padding: 5px 10px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.audiobook-add .action button:first-child{
+    background-color: #0d6efd;
+}
+
+.audiobook-add .action button:first-child:hover{
+    background-color: #2179fd;
+}
+
+.audiobook-add .action button:last-child{
+    background-color: #dc3545;
+}
+
+.audiobook-add .action button:last-child:hover{
+    background-color: #da4352;
+}
