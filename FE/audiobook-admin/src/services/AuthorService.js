@@ -10,8 +10,7 @@ const getAuthHeaders = () => {
 };
 
 // GET all authors (cần token vì Spring yêu cầu authenticated())
-export const listAuthors = () =>
-  axios.get(REST_API_BASE_URL_AUTHOR);
+export const listAuthors = () => axios.get(REST_API_BASE_URL_AUTHOR);
 
 // ADD author
 export const addAuthor = (author) =>

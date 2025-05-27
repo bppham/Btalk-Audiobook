@@ -36,6 +36,15 @@ public enum ErrorCode {
     INVALID_EMPLOYEE_EMAIL(6002, "Cannot find email"),
     INVALID_VERIFY_CODE(6003, "The code is not valid"),
     EXPIRED_VERIFY_CODE(6003, "The code is expired"),
+    UNAUTHORIZED(6004, "Token not found or error"),
+    INTERNAL_SERVER_ERROR(6005, "Google token verification failed"),
+    // User
+    USER_EXISTED(7001, "User already existed"),
+    USER_BLANK(7002, "User cannot be blank"),
+    USER_NOT_FOUND(7003, "User not found"),
+    USER_EMAIL_EXISTED(7004, "User's email already existed"),
+    ACCOUNT_NO_PASSWORD(7005, "Account has only Google login"),
+
     ;
 
     ErrorCode(int code, String message) {

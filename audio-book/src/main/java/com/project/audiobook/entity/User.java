@@ -1,5 +1,6 @@
 package com.project.audiobook.entity;
 
+import com.project.audiobook.utils.AuthProvider;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,4 +27,13 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = true)
+    private String password;
+
+    @Column(nullable = false)
+    private String photoURL;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AuthProvider authProvider;
 }

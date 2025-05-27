@@ -1,33 +1,38 @@
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import './App.css'
+import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+import Navbar from './components/Navbar/Navbar';
+import Sidebar from './components/Sidebar/Sidebar';
+import Home from './pages/Home/Home';
+import AudioBook from './pages/AudioBook/AudioBook';
+import Login from './pages/Authentication/Login/Login';
+import Register from './pages/Authentication/Register/Register'
 
-// Thay thế YOUR_GOOGLE_CLIENT_ID bằng clientId thật của bạn
-const clientId = "183260245351-2k1ksbh7d76sgs1k9m9k9qo7809ts8g6.apps.googleusercontent.com";
+function MainLayout() {
+  return (
+    <>
+      <Navbar />
+      <div className="container">
+        <Sidebar />
+        <Outlet /> {/* Đây là nơi render Home / AudioBook */}
+      </div>
+    </>
+  );
+}
 
 function App() {
   return (
-    <GoogleOAuthProvider clientId={clientId}>
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Auth />} />
-          <Route
-            path="*"
-            element={
-              <>
-                <Navbar />
-                <div className="container">
-                  <Sidebar />
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/library" element={<Library />} />
-                    <Route path="/:id" element={<AudioBook />} />
-                  </Routes>
-                </div>
-              </>
-            }
-          />
-        </Routes>
-      </Router>
-    </GoogleOAuthProvider>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        
+        {/* Route có layout */}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/:id" element={<AudioBook />} />
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 

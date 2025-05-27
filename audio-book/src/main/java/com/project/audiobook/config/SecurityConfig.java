@@ -33,6 +33,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/auth/**").permitAll()
+                        .requestMatchers("/user/auth/**").permitAll()
+                        .requestMatchers("/upload/**").permitAll()
                         .requestMatchers("/employees/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_EMPLOYEE")
                         .requestMatchers("/audiobooks/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_AUDIOBOOK")
                         .requestMatchers(HttpMethod.GET, "/authors/**").permitAll()
