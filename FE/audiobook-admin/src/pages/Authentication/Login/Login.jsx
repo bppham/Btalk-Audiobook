@@ -16,20 +16,23 @@ const Login = () => {
     try {
       const response = await login(email, password);
 
-      const token = response.token;
-      localStorage.setItem("token", token);
+      if (response.code === 1000) {
+        const token = response.result.token;
+        localStorage.setItem("token", token);
 
-      // ✅ Giải mã token để lấy roles
-      const decoded = jwtDecode(token);
-      const roles = decoded.roles;
+        // ✅ Giải mã token để lấy roles
+        const decoded = jwtDecode(token);
+        const roles = decoded.roles;
 
-      // ✅ Lưu email, name, roles (tùy frontend cần gì)
-      localStorage.setItem("email", decoded.sub); // Hoặc response.email nếu backend trả
-      localStorage.setItem("name", response.name); // Nếu backend trả riêng
-      localStorage.setItem("roles", JSON.stringify(roles)); // Đã đúng
+        // ✅ Lưu email, name, roles (tùy frontend cần gì)
+        localStorage.setItem("email", decoded.sub); // Hoặc response.email nếu backend trả
+        localStorage.setItem("name", response.name); // Nếu backend trả riêng
+        localStorage.setItem("roles", JSON.stringify(roles)); // Đã đúng
 
-      navigate("/");
+        navigate("/");
+      }
     } catch (err) {
+      console.log(err);
       setError("Email or password incorrect: ", err);
     }
   };

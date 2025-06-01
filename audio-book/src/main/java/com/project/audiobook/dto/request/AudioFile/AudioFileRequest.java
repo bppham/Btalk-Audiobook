@@ -11,5 +11,4 @@ import lombok.*;
 public class AudioFileRequest {
     private String fileName;
     private String fileUrl;
-    private AudioBook audioBook;
 }

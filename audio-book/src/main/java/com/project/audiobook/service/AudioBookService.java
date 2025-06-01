@@ -1,6 +1,7 @@
 package com.project.audiobook.service;
 
 import com.project.audiobook.dto.request.AudioBook.AudioBookRequest;
+import com.project.audiobook.dto.request.AudioFile.AudioFileRequest;
 import com.project.audiobook.dto.response.Audiobook.AudioBookResponse;
 import com.project.audiobook.entity.*;
 import com.project.audiobook.exception.AppException;
@@ -12,26 +13,33 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = false)
 public class AudioBookService {
-    AudioBookMapper audioBookMapper;
-    AudioBookRepository audioBookRepository;
-    AudioFileRepository audioFileRepository;
-    FileStorageService fileStorageService;
+    @Value("${app.default-book-cover-url}")
+    private String defaultBookCover;
+    final AudioBookMapper audioBookMapper;
+    final AudioBookRepository audioBookRepository;
+    final AudioFileRepository audioFileRepository;
+    final FileStorageService fileStorageService;
 
-    AuthorRepository authorRepository;
-    VoiceRepository voiceRepository;
-    CategoryRepository categoryRepository;
+    final AuthorRepository authorRepository;
+    final VoiceRepository voiceRepository;
+    final CategoryRepository categoryRepository;
 
-    public AudioBookResponse createRequest(AudioBookRequest request, MultipartFile image, List<MultipartFile> audioFiles) {
+    @Transactional
+    public AudioBookResponse createRequest(AudioBookRequest request) {
+        // Kiểm tra tiêu đề trùng
         if (audioBookRepository.existsByTitle(request.getTitle())) {
             throw new AppException(ErrorCode.AUDIOBOOK_EXISTED);
         }
@@ -39,31 +47,39 @@ public class AudioBookService {
         // Tìm Author, Voice, Category
         Author author = authorRepository.findById(request.getAuthorId())
                 .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_FOUND));
+
         Voice voice = voiceRepository.findById(request.getVoiceId())
                 .orElseThrow(() -> new AppException(ErrorCode.VOICE_NOT_FOUND));
-        List<Category> categories = (request.getCategoryIds() != null) ? categoryRepository.findAllById(request.getCategoryIds()) : new ArrayList<>();
 
-        // Upload ảnh
-        if (image != null) {
-            String urlImage = fileStorageService.storeFile(image, request.getTitle(), true);
-            request.setImage(urlImage);
+        List<Category> categories = (request.getCategoryIds() != null)
+                ? categoryRepository.findAllById(request.getCategoryIds())
+                : new ArrayList<>();
+
+        // Nếu không có ảnh thì dùng ảnh mặc định
+        if (request.getImage() == null || request.getImage().isEmpty()) {
+            request.setImage(defaultBookCover);
         }
 
-        // Chuyển từ DTO -> Entity và lưu vào DB
+        // Map DTO -> Entity
         AudioBook audioBook = audioBookMapper.toAudioBook(request, author, voice, categories);
-        audioBook = audioBookRepository.save(audioBook);
 
-        // Upload audio files
-        List<AudioFile> uploadedAudioFiles = new ArrayList<>();
-        if (audioFiles != null) {
-            for (MultipartFile file : audioFiles) {
-                String filePath = fileStorageService.storeFile(file, request.getTitle(), false);
-                uploadedAudioFiles.add(new AudioFile(null, file.getOriginalFilename(), filePath, audioBook));
-            }
+        // Tạo danh sách AudioFile và gán về AudioBook
+        if (request.getAudioFiles() != null && !request.getAudioFiles().isEmpty()) {
+            List<AudioFile> audioFiles = request.getAudioFiles().stream()
+                    .map(fileRequest -> {
+                        AudioFile audioFile = new AudioFile();
+                        audioFile.setFileName(fileRequest.getFileName());
+                        audioFile.setFileUrl(fileRequest.getFileUrl());
+                        audioFile.setAudioBook(audioBook); // liên kết 2 chiều
+                        return audioFile;
+                    }).collect(Collectors.toList());
+            audioBook.setAudioFiles(audioFiles); // gán danh sách vào entity chính
         }
-        audioFileRepository.saveAll(uploadedAudioFiles);
 
-        return audioBookMapper.toAudioBookResponse(audioBook);
+        // Lưu AudioBook (kèm AudioFiles nhờ CascadeType.ALL)
+        AudioBook savedAudioBook = audioBookRepository.save(audioBook);
+
+        return audioBookMapper.toAudioBookResponse(savedAudioBook);
     }
 
     public AudioBookResponse getAudioBookById(Long id) {
@@ -75,9 +91,6 @@ public class AudioBookService {
     public List<AudioBookResponse> getAllAudioBooks() {
         return audioBookRepository.findAll().stream().map(audioBook -> {
             AudioBookResponse response = audioBookMapper.toAudioBookResponse(audioBook);
-
-            // Chuẩn hóa lại đường dẫn ảnh
-            String safeTitle = HandleFile.normalizeTitle(audioBook.getTitle());
             if (audioBook.getImage() != null) {
                 response.setImage(audioBook.getImage());
             }
@@ -86,19 +99,17 @@ public class AudioBookService {
         }).toList();
     }
 
-    public void deleteAudioBook(Long id){
+    public void deleteAudioBook(Long id) {
         AudioBook audioBook = audioBookRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.AUDIOBOOK_NOT_FOUND));
         audioBookRepository.deleteById(id);
     }
 
     @Transactional
-    public AudioBookResponse updateAudioBook(Long id, AudioBookRequest request, MultipartFile image, List<MultipartFile> audioFiles) {
-        // Kiểm tra xem audiobook có tồn tại không
+    public AudioBookResponse updateAudioBook(Long id, AudioBookRequest request) {
         AudioBook audioBook = audioBookRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.AUDIOBOOK_NOT_FOUND));
 
-        // Tìm Author, Voice, Category nếu có thay đổi
         if (request.getAuthorId() != null) {
             Author author = authorRepository.findById(request.getAuthorId())
                     .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_FOUND));
@@ -116,35 +127,52 @@ public class AudioBookService {
             audioBook.setCategories(categories);
         }
 
-        // Cập nhật thông tin chung
         audioBook.setTitle(request.getTitle() != null ? request.getTitle() : audioBook.getTitle());
         audioBook.setDescription(request.getDescription() != null ? request.getDescription() : audioBook.getDescription());
         audioBook.setNote(request.getNote() != null ? request.getNote() : audioBook.getNote());
 
-        // Cập nhật ảnh nếu có
-        if (image != null) {
-            String urlImage = fileStorageService.storeFile(image, audioBook.getTitle(), true);
-            audioBook.setImage(urlImage);
+        if (request.getImage() != null && !request.getImage().isEmpty()) {
+            audioBook.setImage(request.getImage());
         }
 
-        // Lưu thay đổi audiobook
-        audioBook = audioBookRepository.save(audioBook);
+        // Lấy danh sách file hiện tại
+        List<AudioFile> existingFiles = new ArrayList<>(audioBook.getAudioFiles());
 
-        audioFileRepository.deleteByAudioBookId(audioBook.getId());
+        // Lấy danh sách file mới từ request
+        List<AudioFileRequest> requestFiles = request.getAudioFiles();
+        List<AudioFile> updatedFiles = new ArrayList<>();
 
-        // Cập nhật danh sách audioFiles (nếu có)
-        if (audioFiles != null && !audioFiles.isEmpty()) {
-
-            // Upload và lưu file mới
-            List<AudioFile> uploadedAudioFiles = new ArrayList<>();
-            for (MultipartFile file : audioFiles) {
-                String filePath = fileStorageService.storeFile(file, audioBook.getTitle(), false);
-                uploadedAudioFiles.add(new AudioFile(null, file.getOriginalFilename(), filePath, audioBook));
+        if (requestFiles != null && !requestFiles.isEmpty()) {
+            for (AudioFileRequest fileReq : requestFiles) {
+                // Tìm file trùng (dựa trên fileUrl, có thể đổi thành fileName tùy yêu cầu)
+                Optional<AudioFile> matched = existingFiles.stream()
+                        .filter(f -> f.getFileUrl().equals(fileReq.getFileUrl()))
+                        .findFirst();
+                if (matched.isPresent()) {
+                    AudioFile old = matched.get();
+                    old.setFileName(fileReq.getFileName());
+                    updatedFiles.add(old);
+                    existingFiles.remove(old);
+                } else {
+                    AudioFile newFile = new AudioFile(null, fileReq.getFileName(), fileReq.getFileUrl(), audioBook);
+                    updatedFiles.add(newFile);
+                }
             }
-            audioFileRepository.saveAll(uploadedAudioFiles);
+
+            // Xóa những file đã bị bỏ khỏi danh sách
+            for (AudioFile orphan : existingFiles) {
+                audioBook.getAudioFiles().remove(orphan);
+            }
+
+            // Cập nhật danh sách audioFiles
+            audioBook.getAudioFiles().clear();
+            audioBook.getAudioFiles().addAll(updatedFiles);
         }
 
-        return audioBookMapper.toAudioBookResponse(audioBook);
+
+        AudioBook updated = audioBookRepository.save(audioBook);
+        return audioBookMapper.toAudioBookResponse(updated);
     }
+
 
 }

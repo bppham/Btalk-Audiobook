@@ -21,32 +21,18 @@ public class AudioBookController {
     @Autowired
     private AudioBookService audioBookService;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ApiResponse<AudioBookResponse> createAudioBook( @Valid
-            @RequestPart("audioBook") String audioBookJson,
-            @RequestPart(value = "image", required = false) MultipartFile image,
-            @RequestPart(value = "audioFile", required = false) List<MultipartFile> audioFiles) throws JsonProcessingException {
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-        AudioBookRequest request = objectMapper.readValue(audioBookJson, AudioBookRequest.class);
-
+    @PostMapping
+    ApiResponse<AudioBookResponse> createAudioBook(@RequestBody AudioBookRequest request) {
         return ApiResponse.<AudioBookResponse>builder()
-                .result(audioBookService.createRequest(request, image, audioFiles))
+                .result(audioBookService.createRequest(request))
                 .build();
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/{id}")
     ApiResponse<AudioBookResponse> updateAudioBook(@Valid
-            @PathVariable Long id,
-            @RequestPart("audioBook") String audioBookJson,
-            @RequestPart(value = "imageFile", required = false) MultipartFile image,
-            @RequestPart(value = "audioFiles", required = false) List<MultipartFile> audioFiles) throws JsonProcessingException{
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-        AudioBookRequest request = objectMapper.readValue(audioBookJson, AudioBookRequest.class);
+            @PathVariable Long id, @RequestBody AudioBookRequest request) {
         return ApiResponse.<AudioBookResponse>builder()
-                .result(audioBookService.updateAudioBook(id, request, image, audioFiles))
+                .result(audioBookService.updateAudioBook(id, request))
                 .build();
     }
 

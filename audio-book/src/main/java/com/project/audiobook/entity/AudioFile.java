@@ -19,7 +19,7 @@ public class AudioFile {
     @Column(nullable = false, columnDefinition = "NVARCHAR(255)")
     private String fileUrl;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "audio_book_id", nullable = false)
     private AudioBook audioBook;
 }

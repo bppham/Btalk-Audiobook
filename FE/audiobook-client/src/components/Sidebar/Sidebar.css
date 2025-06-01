@@ -1,5 +1,6 @@
 .sidebar{
     width: 20%;
+    min-width: 250px;
     display: flex;
     color: white;
 }
@@ -12,20 +13,26 @@
     padding: 30px;
     flex: 1;
     width: 20%;
+    min-width: 250px;
     background-color: #2c5364;
-
+    overflow-y: auto;
+    transition: transform 0.3s ease;
 }
+
 .sidebar-top{
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
+
 .sidebar-item{
     display: flex;
     gap: 10px;
     align-items: center;
     cursor: pointer;
     padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
 
 .sidebar-item:hover{
@@ -33,16 +40,89 @@
 }
 
 .sidebar .category-list{
-    overflow-y: scroll;
-    height: 200px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.sidebar .category-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar .category-list::-webkit-scrollbar-track {
+    background: #1b3a47;
+    border-radius: 10px;
+}
+
+.sidebar .category-list::-webkit-scrollbar-thumb {
+    background: #476877;
+    border-radius: 10px;
 }
 
 .sidebar .category-list .category-item{
-    font-size: 18px;
-    padding: 5px;
+    font-size: 16px;
+    padding: 8px 10px;
     cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
 }
 
 .sidebar .category-list .category-item:hover{
     background-color: #476877;
+}
+
+/* Mobile menu button */
+.mobile-menu-button {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: #2c5364;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .sidebar-container {
+        transform: translateX(-100%);
+        width: 250px;
+        z-index: 998;
+    }
+
+    .sidebar-container.active {
+        transform: translateX(0);
+    }
+
+    .mobile-menu-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 997;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
 }

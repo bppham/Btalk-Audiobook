@@ -1,151 +1,220 @@
-.login-admin{
-    width: 100vw;
-    height: 100vh;
-    background-image: url("../../../assets/background-admin-login.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+.login-admin {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../../../assets/background-admin-login.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-.login-admin .login-container{
-    width: 80%;
-    height: 70%;
-    background-color: white;
-    display: flex;
-    gap: 10px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
+.login-admin .login-container {
+  width: 80%;
+  height: 70%;
+  background-color: white;
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  flex-wrap: wrap;
 }
 
-.login-admin .login-info{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-    border-right: 1px solid #ccc;
-    padding: 10px;
+.login-admin .login-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  border-right: 1px solid #ccc;
+  padding: 10px;
 }
 
-.login-admin .login-info h3{
-    font-style: italic;
-    color: #3366ff;
-    margin-top: 5px;
+.login-admin .login-info h3 {
+  font-style: italic;
+  color: #3366ff;
+  margin-top: 5px;
 }
 
-.login-admin .login-info .info-description{
-    list-style: disc;
-    font-style: italic;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin-top: 10px;
-    font-weight: 600;
-    font-size: 15px;
+.login-admin .login-info .info-description {
+  list-style: disc;
+  font-style: italic;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 15px;
 }
 
-.login-admin .login-info img{
-    width: 350px;
-    height: 250px;
+.login-admin .login-info img {
+  width: 350px;
+  height: 250px;
 }
 
-.login-admin .login-section{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.login-admin .login-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.login-admin .login-section h1{
-    color: #3366ff;
+.login-admin .login-section h1 {
+  color: #3366ff;
 }
 
-.login-admin .login-section .login-section-container{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: start;
-    width: 100%;
-    padding: 20px;
+.login-admin .login-section .login-section-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: start;
+  width: 100%;
+  padding: 20px;
 }
 
-.login-admin .login-section .login-section-container .item{
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    width: 100%;
+.login-admin .login-section .login-section-container .item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
 }
 
-.login-admin .login-section .login-section-container .item label{
-    font-size: 18px;
-    font-weight: bold;
-    color: #3366ff;
+.login-admin .login-section .login-section-container .item label {
+  font-size: 18px;
+  font-weight: bold;
+  color: #3366ff;
 }
 
-.login-admin .login-section .login-section-container .item input{
-    width: 90%;
-    height: 30px;
-    border: none;
-    border-bottom: 1px solid #ccc;
-    padding: 5px 10px;
+.login-admin .login-section .login-section-container .item input {
+  width: 90%;
+  height: 30px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 5px 10px;
 }
 
 .login-admin .login-section .login-section-container .item .password-container {
-    display: flex;
-    align-items: center;
-    position: relative;
+  display: flex;
+  align-items: center;
+  position: relative;
 }
 
-.login-admin .login-section .login-section-container .item .password-container input {
-    flex: 1;
-    padding-right: 30px; /* Tạo khoảng trống cho icon */
+.login-admin
+  .login-section
+  .login-section-container
+  .item
+  .password-container
+  input {
+  flex: 1;
+  padding-right: 30px; /* Tạo khoảng trống cho icon */
 }
 
 .login-admin .login-section .login-section-container .item .eye-icon {
-    position: absolute;
-    right: 10px;
-    cursor: pointer;
-    color: #666;
-    font-size: 18px;
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #666;
+  font-size: 18px;
 }
 
+.login-admin .login-section .login-section-container .forget-password-item {
+  color: #3366ff;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  width: 100%;
+  font-weight: 520;
+  font-style: italic;
+  font-size: 17px;
+  margin-top: 30px;
+}
 
-.login-admin .login-section .login-section-container .forget-password-item{
-    color: #3366ff;
-    display: flex;
+.login-admin
+  .login-section
+  .login-section-container
+  .forget-password-item
+  p:hover {
+  color: #1649e2;
+  cursor: pointer;
+}
+
+.login-admin .login-section .login-action button {
+  background-color: #3366ff;
+  width: 200px;
+  height: 50px;
+  font-size: 20px;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 25px;
+}
+
+.login-admin .login-section .login-action button:hover {
+  background-color: #507af8;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .login-admin .login-container {
     flex-direction: column;
-    align-items: end;
+    height: auto;
+    width: 90%;
+  }
+
+  .login-admin .login-info {
+    border-right: none;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .login-admin .login-info img {
+    width: 250px;
+    height: auto;
+  }
+
+  .login-admin .login-section .login-section-container .item input {
     width: 100%;
-    font-weight: 520;
-    font-style: italic;
-    font-size: 17px;
-    margin-top: 30px;
+  }
+
+  .login-admin .login-section .login-action button {
+    width: 100%;
+  }
 }
 
-.login-admin .login-section .login-section-container .forget-password-item p:hover{
-    color: #1649e2;
-    cursor: pointer;
-}
+@media (max-width: 600px) {
+  .login-admin .login-info h3 {
+    font-size: 16px;
+    text-align: center;
+  }
 
-.login-admin .login-section .login-action button{
-    background-color: #3366ff;
-    width: 200px;
-    height: 50px;
-    font-size: 20px;
+  .login-admin .login-info .info-description {
+    font-size: 13px;
+    padding: 0 10px;
+    text-align: center;
+  }
+
+  .login-admin .login-section .login-section-container {
     padding: 10px;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 25px;
-}
+  }
 
-.login-admin .login-section .login-action button:hover{
-    background-color: #507af8;
-    cursor: pointer;
+  .login-admin .login-section .login-section-container .item label {
+    font-size: 16px;
+  }
+
+  .login-admin .login-section .login-section-container .forget-password-item {
+    font-size: 14px;
+  }
+
+  .login-admin .login-section h1 {
+    font-size: 24px;
+  }
+
+  .login-admin .login-info img {
+    width: 180px;
+    height: auto;
+  }
 }

@@ -5,10 +5,19 @@
 
 .container{
     display: flex;
+    width: 100%;
+    min-height: 100vh;
 }
   
 .link{
     text-decoration: none;
     color: inherit;
+}
+  
+/* Responsive styles */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
 }
   

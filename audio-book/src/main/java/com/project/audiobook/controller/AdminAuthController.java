@@ -21,8 +21,10 @@ public class AdminAuthController {
     AdminAuthService adminAuthService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        return ResponseEntity.ok(adminAuthService.login(request));
+    ApiResponse<LoginResponse> login(@RequestBody LoginRequest request) {
+        return ApiResponse.<LoginResponse>builder()
+                .result(adminAuthService.login(request))
+                .build();
     }
 
     @PostMapping("/forget-password")

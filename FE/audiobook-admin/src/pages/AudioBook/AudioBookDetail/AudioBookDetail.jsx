@@ -50,78 +50,21 @@ const AudioBookDetail = () => {
       setImage(file);
     }
   };
-
-  // Return image url
-  const handleImageUrl = (url) => {
-    return "http://localhost:8080/files/" + url;
-  };
-
-  // Return file url
-  const handleFileUrl = (url) => {
-    return "http://localhost:8080/files/" + url;
-  };
-
   // Show image at the beginning
   useEffect(() => {
     if (audioBook && audioBook.image) {
-      const urlImage = handleImageUrl(audioBook.image);
-      setImagePreview(urlImage);
+      setImagePreview(audioBook.image);
     }
   }, [audioBook]);
 
-  // Handel categories
-  // const [allCategories, setAllCategories] = useState([]);
-  // const fetchCategories = async () => {
-  //     try {
-  //         const response = await listCategories();
-  //         setAllCategories(response.data);
-  //     } catch (error) {
-  //         console.error("Error fetching categories:", error);
-  //         toast.error("Failed to load categories!");
-  //     }
-  // }
-  // useEffect(() => {
-  //     fetchCategories();
-  // }, []);
-
-  // const handleCategoryChange = (event) => {
-  //     const categoryId = Number(event.target.value);
-  //     console.log("Category ID:", categoryId, "Type:", typeof categoryId);
-
-  //     setAudioBook((prev) => ({
-  //         ...prev,
-  //         categories: prev.categories.includes(categoryId)
-  //             ? prev.categories.filter(id => id !== categoryId)  // Bỏ nếu đã có
-  //             : [...prev.categories, categoryId]  // Thêm nếu chưa có
-  //     }));
-  // };
 
   // Handle File Change
   const [audioPreviews, setAudioPreviews] = useState([]);
-  const handleAudioFiles = (event) => {
-    const files = Array.from(event.target.files);
-    console.log(files.length);
-    if (files.length > 0) {
-      const newPreviews = files.map((file) => ({
-        url: URL.createObjectURL(file),
-        name: file.name,
-      }));
-
-      setAudioPreviews((prev) => [...prev, ...newPreviews]);
-      setAudioFiles((prev) => [...prev, ...files]);
-    }
-  };
-
-  const removeFile = (index) => {
-    const updatedFiles = audioFiles.filter((_, i) => i !== index);
-    setAudioFiles(updatedFiles);
-    setAudioPreviews((prev) => prev.filter((_, i) => i !== index));
-  };
 
   useEffect(() => {
     if (audioBook && audioBook.audioFiles && audioBook.audioFiles.length > 0) {
       const audioUrls = audioBook.audioFiles.map((file) => ({
-        url: handleFileUrl(file.fileUrl), // Tạo URL từ file đã lưu
+        url: file.fileUrl, // Tạo URL từ file đã lưu
         name: file.fileName,
       }));
       setAudioPreviews(audioUrls);
@@ -196,18 +139,6 @@ const AudioBookDetail = () => {
                 <ul>
                   {audioPreviews.map((audio, index) => (
                     <li key={index}>
-                      <div className="action">
-                        <button
-                          onClick={() => removeFile(index)}
-                          style={{
-                            marginLeft: "10px",
-                            cursor: "pointer",
-                            color: "red",
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faX} className="icon" />
-                        </button>
-                      </div>
                       <div className="audio-info">
                         <p>{audio.name}</p>
                         <audio controls>

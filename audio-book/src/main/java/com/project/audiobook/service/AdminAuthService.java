@@ -36,7 +36,7 @@ public class AdminAuthService {
 
     public LoginResponse login(LoginRequest request) {
         Employee employee = employeeRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.INVALID_CREDENTIALS));
+                .orElseThrow(() -> new AppException(ErrorCode.INVALID_EMPLOYEE_EMAIL));
 
         if (!passwordEncoder.matches(request.getPassword(), employee.getPassword())) {
             throw new AppException(ErrorCode.INVALID_CREDENTIALS);

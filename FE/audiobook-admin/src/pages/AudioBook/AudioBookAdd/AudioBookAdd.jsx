@@ -4,176 +4,178 @@ import { listCategories } from "../../../services/CategoryService";
 import { listAuthors } from "../../../services/AuthorService";
 import { listVoices } from "../../../services/VoiceService";
 import { useNavigate } from "react-router-dom";
-import { addAudioBook } from "../../../services/AudiobookService";
+import { addAudiobook } from "../../../services/AudiobookService";
 import { ToastContainer, toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
+import { uploadAudioFiles, uploadBookCover } from "../../../services/Upload";
+
 const AudioBookAdd = () => {
   const navigate = useNavigate();
-
+  
+  // Main state
   const [audioBook, setAudioBook] = useState({
     title: "",
     description: "",
-    author: "",
-    voice: "",
+    authorId: "",
+    voiceId: "",
     note: "",
-    categories: [],
+    categoryIds: [],
   });
 
-  const [image, setImage] = useState(null);
-  const [audioFiles, setAudioFiles] = useState([]);
+  // Lists
+  const [allAuthors, setAllAuthors] = useState([]);
+  const [allVoices, setAllVoices] = useState([]);
+  const [allCategories, setAllCategories] = useState([]);
 
-  // Handle input
+  // Image preview
+  const [imagePreview, setImagePreview] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+
+  // Audio files
+  const [audioFiles, setAudioFiles] = useState([]); // Array of File objects
+  const [audioPreviews, setAudioPreviews] = useState([]); // {name, url}
+
+  // Handle input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setAudioBook((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Preview Image
-  const [imagePreview, setImagePreview] = useState(null);
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImagePreview(imageUrl);
-      setImage(file);
-    }
-  };
-
-  // Handel categories
-  const [allCategories, setAllCategories] = useState([]);
-  const fetchCategories = async () => {
-    try {
-      const response = await listCategories();
-      setAllCategories(response.data.result);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-      toast.error("Failed to load categories!");
-    }
-  };
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const handleCategoryChange = (event) => {
-    const categoryId = Number(event.target.value);
-    console.log("Category ID:", categoryId, "Type:", typeof categoryId);
-
-    setAudioBook((prev) => ({
-      ...prev,
-      categories: prev.categories.includes(categoryId)
-        ? prev.categories.filter((id) => id !== categoryId) // Bỏ nếu đã có
-        : [...prev.categories, categoryId], // Thêm nếu chưa có
-    }));
-  };
-
-  // Handle Author and Voice
-  const [allAuthors, setAuthors] = useState([]);
-  const fetchAuthors = async () => {
-    try {
-      const response = await listAuthors();
-      setAuthors(response.data.result);
-    } catch (error) {
-      console.error("Error fetching authors:", error);
-      toast.error("Failed to load authors!");
-    }
-  };
-
+  // Handle author/voice select
   const handleAuthorChange = (e) => {
-    const selectedValue = e.target.value;
-    console.log(selectedValue);
-    if (selectedValue === "new") {
+    const val = e.target.value;
+    if (val === "new") {
       navigate("/authors");
     } else {
-      setAudioBook({ ...audioBook, author: selectedValue });
-    }
-  };
-
-  const [allVoices, setVoices] = useState([]);
-  const fetchVoices = async () => {
-    try {
-      const response = await listVoices();
-      setVoices(response.data.result);
-    } catch (error) {
-      console.error("Error fetching voices:", error);
-      toast.error("Failed to load voices!");
+      setAudioBook((prev) => ({ ...prev, authorId: val }));
     }
   };
 
   const handleVoiceChange = (e) => {
-    const selectedValue = e.target.value;
-    console.log(selectedValue);
-    if (selectedValue === "new") {
+    const val = e.target.value;
+    if (val === "new") {
       navigate("/voices");
     } else {
-      setAudioBook({ ...audioBook, voice: selectedValue });
+      setAudioBook((prev) => ({ ...prev, voiceId: val }));
     }
   };
 
-  useEffect(() => {
-    fetchAuthors();
-    fetchVoices();
-  }, []);
+  // Handle image
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
 
-  // Handle File Change
+  // Handle categories
+  const handleCategoryChange = (e) => {
+    const categoryId = Number(e.target.value);
+    setAudioBook((prev) => ({
+      ...prev,
+      categoryIds: prev.categoryIds.includes(categoryId)
+        ? prev.categoryIds.filter((id) => id !== categoryId)
+        : [...prev.categoryIds, categoryId],
+    }));
+  };
+
+  // Handle audio files
   const handleAudioFiles = (e) => {
     const files = Array.from(e.target.files);
-    setAudioFiles([...audioFiles, ...files]);
+    if (!files.length) return;
+    const newPreviews = files.map((file) => ({
+      name: file.name,
+      url: URL.createObjectURL(file),
+    }));
+    setAudioFiles((prev) => [...prev, ...files]);
+    setAudioPreviews((prev) => [...prev, ...newPreviews]);
   };
 
+  // Remove audio file
   const removeFile = (index) => {
-    const updatedFiles = audioFiles.filter((_, i) => i !== index);
-    setAudioFiles(updatedFiles);
+    setAudioFiles((prev) => prev.filter((_, i) => i !== index));
+    setAudioPreviews((prev) => prev.filter((_, i) => i !== index));
   };
+
+  // Change audio file name
+  const handleInputFileNameChange = (index, newName) => {
+    setAudioPreviews((prev) =>
+      prev.map((f, i) => (i === index ? { ...f, name: newName } : f))
+    );
+  };
+
+  // Fetch initial data
+  useEffect(() => {
+    const fetchAll = async () => {
+      try {
+        const [authorsRes, voicesRes, catsRes] = await Promise.all([
+          listAuthors(),
+          listVoices(),
+          listCategories(),
+        ]);
+        setAllAuthors(authorsRes.data.result || []);
+        setAllVoices(voicesRes.data.result || []);
+        setAllCategories(catsRes.data.result || []);
+      } catch (err) {
+        toast.error("Lỗi tải dữ liệu!");
+        console.error(err);
+      }
+    };
+    fetchAll();
+  }, []);
 
   // Handle Submit
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Chuyển đổi categories thành danh sách object { id: categoryId }
-    // const formattedAudioBook = {
-    //     ...audioBook,
-    //     author: audioBook.author ? {id: audioBook.author} : null,
-    //     voice: audioBook.voice ? {id: audioBook.voice} : null,
-    //     categories: audioBook.categories.map(id => ({ id })) // Chuyển đổi danh sách số thành danh sách object
-    // };
-
-    const formattedAudioBook = {
-      title: audioBook.title,
-      description: audioBook.description,
-      note: audioBook.note,
-      authorId: audioBook.author, // ID thôi, không phải object
-      voiceId: audioBook.voice, // ID thôi
-      categoryIds: audioBook.categories, // Mảng ID số
-    };
-    console.log("formattedAudiobook ", formattedAudioBook);
-    const formData = new FormData();
-    formData.append(
-      "audioBook",
-      new Blob([JSON.stringify(formattedAudioBook)], {
-        type: "application/json",
-      })
-    ); // Đúng cách gửi JSON
-    if (image) formData.append("image", image);
-    audioFiles.forEach((file) => {
-      formData.append("audioFile", file);
-    });
-
+  const handleSubmit = async () => {
     try {
-      await addAudioBook(formData);
+      // Handle image upload
+      let imageUrl = null;
+      if (imageFile) {
+        const imageRes = await uploadBookCover(imageFile);
+        imageUrl = imageRes.data.result.url;
+      }
+
+      // Handle audio files upload
+      let uploadedAudioFiles = [];
+      if (audioFiles.length > 0) {
+        const newFiles = audioFiles.map((file, idx) => ({
+          file,
+          customName: audioPreviews[idx].name,
+        }));
+        const resAudio = await uploadAudioFiles(newFiles);
+        uploadedAudioFiles = resAudio.data.result.map((file) => ({
+          fileName: file.fileName,
+          fileUrl: file.url,
+        }));
+      }
+
+      // Prepare payload
+      const payload = {
+        title: audioBook.title,
+        description: audioBook.description,
+        note: audioBook.note,
+        authorId: Number(audioBook.authorId),
+        voiceId: Number(audioBook.voiceId),
+        categoryIds: audioBook.categoryIds,
+        image: imageUrl,
+        audioFiles: uploadedAudioFiles,
+      };
+
+      await addAudiobook(payload);
       toast.success("Audiobook added successfully!");
-      navigate("/audiobooks"); // Quay lại trang danh sách
-    } catch (error) {
+      navigate("/audiobooks");
+    } catch (err) {
       toast.error("Failed to add audiobook!");
-      console.error(error);
+      console.error(err);
     }
   };
 
   return (
-    <div className="audiobook-add">
+    <div className="audiobook-update">
       <ToastContainer position="top-right" autoClose={3000} />
       <h1>Add an audiobook</h1>
-      <div className="form-add-audiobook">
+      <div className="form-update-audiobook">
         <div className="row">
           <div className="item">
             <label>Title</label>
@@ -185,12 +187,24 @@ const AudioBookAdd = () => {
             />
           </div>
         </div>
+
+        <div className="row">
+          <div className="item">
+            <label>Description</label>
+            <textarea
+              name="description"
+              value={audioBook.description}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+
         <div className="row">
           <div className="item">
             <label>Author</label>
             <select
-              name="author"
-              value={audioBook.author || ""}
+              name="authorId"
+              value={audioBook.authorId || ""}
               onChange={handleAuthorChange}
             >
               <option value="">Chọn tác giả</option>
@@ -205,8 +219,8 @@ const AudioBookAdd = () => {
           <div className="item">
             <label>Voice</label>
             <select
-              name="voice"
-              value={audioBook.voice || ""}
+              name="voiceId"
+              value={audioBook.voiceId || ""}
               onChange={handleVoiceChange}
             >
               <option value="">Chọn giọng đọc</option>
@@ -219,79 +233,29 @@ const AudioBookAdd = () => {
             </select>
           </div>
         </div>
+
         <div className="row">
           <div className="item">
-            <label>Image</label>
-            <input
-              type="file"
-              name="image"
-              id=""
-              onChange={handleImageChange}
-            />
-          </div>
-          {imagePreview && (
-            <div className="image-preview">
-              <img src={imagePreview} alt="Preview" />
-            </div>
-          )}
-        </div>
-        <div className="row">
-          <label>Categories</label>
-          <div className="category-list">
-            {allCategories.map((category) => (
-              <label key={category.id} className="category-item">
-                <input
-                  type="checkbox"
-                  value={category.id}
-                  onChange={handleCategoryChange}
-                  checked={audioBook.categories.includes(category.id)}
-                />
-                {category.name}
-              </label>
-            ))}
-          </div>
-        </div>
-        <div className="row">
-          <div className="item">
-            <label>Audio Files</label>
-            <input
-              type="file"
-              name="audioFiles"
-              multiple
-              accept="audio/*"
-              onChange={handleAudioFiles}
-            />
-          </div>
-          <div className="item">
-            <ul className="show-audio-preview">
-              {audioFiles.map((file, index) => (
-                <li key={index}>
-                  {file.name}
-                  <button
-                    onClick={() => removeFile(index)}
-                    style={{
-                      marginLeft: "10px",
-                      cursor: "pointer",
-                      color: "red",
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faX} className="icon" />
-                  </button>
-                </li>
+            <label>Categories</label>
+            <div className="categories-container">
+              {allCategories.map((category) => (
+                <div key={category.id} className="category-item">
+                  <input
+                    type="checkbox"
+                    id={`category-${category.id}`}
+                    value={category.id}
+                    checked={audioBook.categoryIds.includes(category.id)}
+                    onChange={handleCategoryChange}
+                  />
+                  <label htmlFor={`category-${category.id}`}>
+                    {category.name}
+                  </label>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
-        <div className="row">
-          <div className="item">
-            <label>Description</label>
-            <textarea
-              name="description"
-              value={audioBook.description}
-              onChange={handleInputChange}
-            ></textarea>
-          </div>
-        </div>
+
         <div className="row">
           <div className="item">
             <label>Note</label>
@@ -299,13 +263,84 @@ const AudioBookAdd = () => {
               name="note"
               value={audioBook.note}
               onChange={handleInputChange}
-            ></textarea>
+            />
           </div>
         </div>
-      </div>
-      <div className="action">
-        <button onClick={handleSubmit}>Save</button>
-        <button onClick={() => navigate("/audiobooks")}>Cancel</button>
+
+        <div className="row">
+          <div className="item">
+            <label>Cover Image</label>
+            <div className="cover-container">
+              <input
+                type="file"
+                id="fileInput"
+                onChange={handleImageChange}
+                style={{ display: "none" }}
+                accept="image/*"
+              />
+              <button
+                type="button"
+                onClick={() => document.getElementById("fileInput").click()}
+              >
+                Chọn ảnh
+              </button>
+              {imagePreview && (
+                <div className="image-preview">
+                  <img src={imagePreview} alt="Preview" />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="item">
+            <label>Audio Files</label>
+            <div className="audio-files-container">
+              <input
+                type="file"
+                id="audioInput"
+                onChange={handleAudioFiles}
+                style={{ display: "none" }}
+                accept="audio/*"
+                multiple
+              />
+              <button
+                type="button"
+                onClick={() => document.getElementById("audioInput").click()}
+              >
+                Chọn file audio
+              </button>
+              <div className="audio-files-list">
+                {audioPreviews.map((file, index) => (
+                  <div key={index} className="audio-file-item">
+                    <input
+                      type="text"
+                      value={file.name}
+                      onChange={(e) =>
+                        handleInputFileNameChange(index, e.target.value)
+                      }
+                    />
+                    <audio controls src={file.url} />
+                    <button
+                      type="button"
+                      className="remove-file"
+                      onClick={() => removeFile(index)}
+                    >
+                      <FontAwesomeIcon icon={faX} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="row">
+          <button type="button" onClick={handleSubmit} className="update-button">
+            Add Audiobook
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -8,6 +8,7 @@
     top: 0;
     z-index: 999;
     display: flex;
+    padding: 0 10px;
 }
 
 .navbar-left{
@@ -18,7 +19,7 @@
     justify-content: center;
     align-items: center;
     padding: 10px;
-    width: 200px;
+    min-width: 150px;
 }
 
 .navbar-center{
@@ -67,21 +68,69 @@
 }
 
 .navbar-right {
-    width: 100px;
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* Hoặc center nếu muốn canh giữa */
-    gap: 30px; /* Điều chỉnh khoảng cách giữa các phần tử */
+    justify-content: flex-end;
+    gap: 30px;
     margin-right: 20px;
-    flex-shrink: 0;
+    min-width: 100px;
 }
-
 
 .navbar-right svg{
     height: 30px;
     cursor: pointer;
+    color: white;
 }
 
 .navbar-right svg:hover{
-    color: white;
+    color: #ccc;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .navbar {
+        height: auto;
+        flex-wrap: wrap;
+        padding: 10px;
+    }
+
+    .navbar-left {
+        width: 100%;
+        justify-content: center;
+        min-width: auto;
+    }
+
+    .navbar-center {
+        width: 100%;
+        margin: 10px 0;
+        order: 3;
+    }
+
+    .navbar-right {
+        width: auto;
+        margin-right: 0;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-center {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .navbar-center input {
+        border-radius: 20px;
+        width: 100%;
+    }
+
+    .navbar-center button {
+        width: 100%;
+        border-radius: 20px;
+        margin: 0;
+    }
+
+    .navbar-right {
+        gap: 20px;
+    }
 }

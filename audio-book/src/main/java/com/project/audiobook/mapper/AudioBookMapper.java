@@ -37,7 +37,6 @@ public interface AudioBookMapper {
     default List<Long> mapCategories(List<Category> categories) {
         return (categories != null) ? categories.stream().map(Category::getId).collect(Collectors.toList()) : null;
     }
-
     @Named("mapCategoryNames")
     default List<String> mapCategoryNames(List<Category> categories) {
         if (categories != null) {
@@ -45,5 +44,4 @@ public interface AudioBookMapper {
         }
         return null;
     }
-
 }

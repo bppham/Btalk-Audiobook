@@ -82,12 +82,6 @@ const AudioBookList = () => {
     }
   };
 
-  // Return image url
-  const handleImageUrl = (url) => {
-    console.log(url);
-    return "http://localhost:8080/files/" + url;
-  };
-
   // Delete a category
   const handleDelete = async (id) => {
     Swal.fire({
@@ -192,7 +186,7 @@ const AudioBookList = () => {
               <tr key={audiobook.id}>
                 <td>{audiobook.id}</td>
                 <td>
-                  <img src={handleImageUrl(audiobook.image)} alt="" />
+                  <img src={audiobook.image} alt="" />
                 </td>
                 <td>{audiobook.title}</td>
                 <td>{audiobook.authorName}</td>
