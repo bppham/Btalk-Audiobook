@@ -32,6 +32,7 @@ public class AudioBookService {
     final AudioBookRepository audioBookRepository;
     final LikeRepository likeRepository;
     final RatingRepository ratingRepository;
+    final LibraryRepositry libraryRepositry;
 
     final AuthorRepository authorRepository;
     final VoiceRepository voiceRepository;
@@ -105,6 +106,10 @@ public class AudioBookService {
             ratingRepository.findByUserIdAndAudioBookId(userId, id)
                     .ifPresent(rating -> response.setUserRating(rating.getValue()));
         }
+        // Lưu vào thư viện của người dùng hiện tại (nếu có)
+        response.setSavedByCurrentUser(
+                userId != null && libraryRepositry.existsByUserIdAndAudioBookId(userId, audioBook.getId())
+        );
 
         return response;
     }

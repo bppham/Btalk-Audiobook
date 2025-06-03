@@ -8,6 +8,7 @@ import {
   faHeadphones,
   faThumbTack,
   faThumbsUp,
+  faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import Rating from "../../components/Rating/Rating";
 import AudiobookPlayer from "../../components/AudioPlayer/AudioPlayer";
@@ -15,6 +16,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getAudiobookById } from "../../services/AudiobookService";
 import { toggleLike } from "../../services/LikeService";
 import { ratingAudiobook } from "../../services/RatingService";
+import {
+  saveToLibrary,
+  removeFromLibrary,
+} from "../../services/LibraryService";
 
 const AudioBook = () => {
   const { id } = useParams();
@@ -38,13 +43,15 @@ const AudioBook = () => {
       const result = response.data.result;
       console.log("📥 API Response:", result);
       setAudioBook(result);
-      
+
       setLikeCount(result.likeCount || 0);
       setLiked(result.likedByCurrentUser || false);
-      
+
       setRating(result.userRating || 0);
       setRatingCount(result.ratingCount);
       setRatinigAverage(result.averageRating);
+
+      setIsSaved(result.savedByCurrentUser || false);
     } catch (error) {
       console.error("Error fetching audiobook: " + error);
     }
@@ -115,6 +122,23 @@ const AudioBook = () => {
     }
   };
 
+  // Save to library
+  const [isSaved, setIsSaved] = useState(false);
+  const handleToggleSave = async () => {
+    try {
+      if (isSaved) {
+        await removeFromLibrary(id);
+        setIsSaved(false);
+      } else {
+        await saveToLibrary(id);
+        setIsSaved(true);
+      }
+    } catch (err) {
+      console.error("Toggle save failed", err);
+      alert("Thao tác thất bại!");
+    }
+  };
+
   return (
     <div className="audiobook">
       <div className="quick-information">
@@ -157,9 +181,16 @@ const AudioBook = () => {
             </div>
           </div>
           <div className="action-section">
-            <button>
-              <FontAwesomeIcon icon={faThumbTack} />
-              <p>Thêm vào danh sách nghe sau</p>
+            <button
+              className={`library-button ${isSaved ? "saved" : ""}`}
+              onClick={handleToggleSave}
+            >
+              <FontAwesomeIcon icon={isSaved ? faCheckCircle : faThumbTack} />
+              <span>
+                {isSaved
+                  ? "Đã thêm vào thư viện"
+                  : "Thêm vào danh sách nghe sau"}
+              </span>
             </button>
             <div className="like-section">
               <button

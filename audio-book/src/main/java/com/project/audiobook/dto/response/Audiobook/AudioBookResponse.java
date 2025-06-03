@@ -27,4 +27,5 @@ public class AudioBookResponse {
     private long ratingCount;
     private double averageRating;
     private Double userRating;
+    private boolean savedByCurrentUser;
 }

@@ -26,6 +26,8 @@ public enum ErrorCode {
     AUDIOBOOK_BLANK(4002, "Audio book cannot be blank"),
     AUDIOBOOK_NOT_FOUND(4003, "Audio book not found"),
     RATING_VALUE_INVALID(4004, "Rating value must between 0 and 5"),
+    ALREADY_IN_LIBRARY(4005, "This audiobook already in library"),
+    NOT_FOUND_IN_LIBRARY(4006, "This audiobook not found in library"),
     // Employee
     EMPLOYEE_EXISTED(5001, "Employee already existed"),
     EMPLOYEE_BLANK(5002, "Employee cannot be blank"),

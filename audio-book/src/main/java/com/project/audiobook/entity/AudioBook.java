@@ -55,4 +55,7 @@ public class AudioBook {
     @OneToMany(mappedBy = "audioBook", cascade = CascadeType.ALL)
     private List<Rating> ratings;
 
+    @OneToMany(mappedBy = "audioBook", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Library> savedByUsers = new ArrayList<>();
+
 }

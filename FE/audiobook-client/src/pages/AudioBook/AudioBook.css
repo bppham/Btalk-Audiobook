@@ -102,6 +102,7 @@
   display: flex;
   align-items: center;
   margin-left: auto;
+  margin-top: 10px;
 }
 
 .audiobook .quick-information .info-container .action-section .like-button {
@@ -293,4 +294,28 @@
     font-size: 16px;
     padding: 8px 12px;
   }
+}
+
+.library-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #eeeeee;
+  color: #333;
+  transition: background-color 0.3s ease;
+}
+
+.library-button:hover {
+  background-color: #ddd;
+}
+
+.library-button.saved {
+  background-color: #4caf50;
+  color: rgb(13, 224, 108);
 }
