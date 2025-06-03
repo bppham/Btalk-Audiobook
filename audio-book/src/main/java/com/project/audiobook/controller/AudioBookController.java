@@ -7,6 +7,8 @@ import com.project.audiobook.dto.request.AudioBook.AudioBookRequest;
 import com.project.audiobook.dto.response.ApiResponse;
 import com.project.audiobook.dto.response.Audiobook.AudioBookResponse;
 import com.project.audiobook.service.AudioBookService;
+import com.project.audiobook.utils.JwtRequestUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,6 +22,8 @@ import java.util.List;
 public class AudioBookController {
     @Autowired
     private AudioBookService audioBookService;
+    @Autowired
+    private JwtRequestUtil jwtRequestUtil;
 
     @PostMapping
     ApiResponse<AudioBookResponse> createAudioBook(@RequestBody AudioBookRequest request) {
@@ -42,10 +46,20 @@ public class AudioBookController {
         return ApiResponse.<String>builder().result("Audio book has been deleted").build();
     }
 
-    @GetMapping(value = "/{id}")
-    ApiResponse<AudioBookResponse> getAudioBookById(@PathVariable Long id){
+    @GetMapping("/{id}")
+    public ApiResponse<AudioBookResponse> getAudioBookById(
+            @PathVariable Long id,
+            HttpServletRequest request
+    ) {
+        Long userId = null;
+        try {
+            userId = jwtRequestUtil.getUserIdFromRequest(request);
+        } catch (Exception e) {
+            // Không có token hoặc token sai, thì userId vẫn null → OK
+        }
+
         return ApiResponse.<AudioBookResponse>builder()
-                .result(audioBookService.getAudioBookById(id))
+                .result(audioBookService.getAudioBookById(id, userId))
                 .build();
     }
 

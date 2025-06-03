@@ -22,4 +22,9 @@ public class AudioBookResponse {
     private List<Long> categoryIds;
     private List<String> categoryNames;
     private List<AudioFileResponse> audioFiles;
+    private Long likeCount;
+    private boolean likedByCurrentUser;
+    private long ratingCount;
+    private double averageRating;
+    private Double userRating;
 }

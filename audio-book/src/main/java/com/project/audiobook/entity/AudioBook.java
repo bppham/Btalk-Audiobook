@@ -48,4 +48,11 @@ public class AudioBook {
 
     @OneToMany(mappedBy = "audioBook", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AudioFile> audioFiles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "audioBook", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "audioBook", cascade = CascadeType.ALL)
+    private List<Rating> ratings;
+
 }

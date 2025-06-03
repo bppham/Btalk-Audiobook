@@ -36,6 +36,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/auth/**").permitAll()
                         .requestMatchers("/upload/**").permitAll()
                         .requestMatchers("/employees/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_EMPLOYEE")
+                        .requestMatchers(HttpMethod.GET, "/audiobooks/**").permitAll()
                         .requestMatchers("/audiobooks/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_AUDIOBOOK")
                         .requestMatchers(HttpMethod.GET, "/authors/**").permitAll()
                         .requestMatchers("/authors/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_AUDIOBOOK")
@@ -44,6 +45,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
                         .requestMatchers("/categories/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_AUDIOBOOK")
                         .requestMatchers("/files/**").permitAll()
+                        .requestMatchers("/likes/**").authenticated()
+                        .requestMatchers("/ratings/**").authenticated()
                         .anyRequest().authenticated() // Các endpoint khác cần đăng nhập
                 )
                 .cors(cors -> cors.configurationSource(request -> {

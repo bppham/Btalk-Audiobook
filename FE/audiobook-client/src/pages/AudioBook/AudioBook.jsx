@@ -7,11 +7,14 @@ import {
   faMicrophoneLines,
   faHeadphones,
   faThumbTack,
+  faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 import Rating from "../../components/Rating/Rating";
 import AudiobookPlayer from "../../components/AudioPlayer/AudioPlayer";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAudiobookById } from "../../services/AudiobookService";
+import { toggleLike } from "../../services/LikeService";
+import { ratingAudiobook } from "../../services/RatingService";
 
 const AudioBook = () => {
   const { id } = useParams();
@@ -32,8 +35,16 @@ const AudioBook = () => {
   const fetchData = async () => {
     try {
       const response = await getAudiobookById(id);
-      console.log("📥 API Response:", response.data);
-      setAudioBook(response.data.result);
+      const result = response.data.result;
+      console.log("📥 API Response:", result);
+      setAudioBook(result);
+      
+      setLikeCount(result.likeCount || 0);
+      setLiked(result.likedByCurrentUser || false);
+      
+      setRating(result.userRating || 0);
+      setRatingCount(result.ratingCount);
+      setRatinigAverage(result.averageRating);
     } catch (error) {
       console.error("Error fetching audiobook: " + error);
     }
@@ -50,20 +61,10 @@ const AudioBook = () => {
   const [imagePreview, setImagePreview] = useState(null);
   useEffect(() => {
     if (audioBook && audioBook.image) {
-      const urlImage = handleImageUrl(audioBook.image);
+      const urlImage = audioBook.image;
       setImagePreview(urlImage);
     }
   }, [audioBook]);
-
-  // Return image url
-  const handleImageUrl = (url) => {
-    return "http://localhost:8080/files/" + url;
-  };
-
-  // Return file url
-  const handleFileUrl = (url) => {
-    return "http://localhost:8080/files/" + url;
-  };
 
   // String category
   const getCategoryString = (categories) => {
@@ -74,7 +75,7 @@ const AudioBook = () => {
   useEffect(() => {
     if (audioBook && audioBook.audioFiles && audioBook.audioFiles.length > 0) {
       const audioUrls = audioBook.audioFiles.map((file) => ({
-        url: handleFileUrl(file.fileUrl), // Tạo URL từ file đã lưu
+        url: file.fileUrl, // Tạo URL từ file đã lưu
         name: file.fileName,
       }));
       setAudioFiles(audioBook.audioFiles);
@@ -82,8 +83,38 @@ const AudioBook = () => {
     }
   }, [audioBook]);
 
+  // Like
+  const [likeCount, setLikeCount] = useState(0);
+  const [liked, setLiked] = useState(false);
+  const handleToggleLike = async () => {
+    try {
+      const res = await toggleLike(id);
+      const { likeCount, likedByCurrentUser } = res.data.result;
+
+      setLikeCount(likeCount);
+      setLiked(likedByCurrentUser);
+    } catch (error) {
+      console.error("Toggle like failed", error);
+    }
+  };
+
   // Rating stars
   const [rating, setRating] = useState(0);
+  const [ratingCount, setRatingCount] = useState(0);
+  const [ratingAvarage, setRatinigAverage] = useState(0);
+  const handleRating = async (value) => {
+    setRating(value);
+    try {
+      const res = await ratingAudiobook(id, value);
+      const { averageRating, totalRatings } = res.data.result;
+
+      setRatingCount(totalRatings);
+      setRatinigAverage(averageRating);
+    } catch (error) {
+      console.error("Rating failed", error);
+    }
+  };
+
   return (
     <div className="audiobook">
       <div className="quick-information">
@@ -128,8 +159,17 @@ const AudioBook = () => {
           <div className="action-section">
             <button>
               <FontAwesomeIcon icon={faThumbTack} />
-              <p>Ghim</p>
+              <p>Thêm vào danh sách nghe sau</p>
             </button>
+            <div className="like-section">
+              <button
+                className={`like-button ${liked ? "liked" : ""}`}
+                onClick={handleToggleLike}
+              >
+                <FontAwesomeIcon icon={faThumbsUp} />
+                <span>{likeCount}</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -137,12 +177,12 @@ const AudioBook = () => {
       <div className="rating">
         <div className="score-average">
           <div className="score">
-            <span>4.6</span>
+            <span>{ratingAvarage}</span>
           </div>
-          <div className="vote-count">26 lượt đánh giá</div>
+          <div className="vote-count">{ratingCount} lượt đánh giá</div>
         </div>
         <div className="rating-section">
-          <Rating value={rating} onChange={setRating} />
+          <Rating value={rating} onChange={handleRating} />
           <p className="rating-text">Đánh giá: {rating} sao</p>
         </div>
       </div>

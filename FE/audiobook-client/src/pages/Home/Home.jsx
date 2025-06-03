@@ -23,11 +23,6 @@ const Home = () => {
         fetchAudioBooks();
     }, []);
 
-    // Return image url
-    const handleImageUrl = (url) => {
-        return "http://localhost:8080/files/" + url;
-    }
-
 
   return (
     <div className='home'>
@@ -44,7 +39,7 @@ const Home = () => {
                         {audiobooks.map((audiobook) => (
                             <div className="audiobook-item" key={audiobook.id} onClick={() => navigate(`/${audiobook.id}`)}>
                                 <div className="book-image">
-                                    <img src={handleImageUrl(audiobook.image)} alt={audiobook.title} />
+                                    <img src={audiobook.image} alt={audiobook.title} />
                                 </div>
                                 <div className="book-title">
                                     <p>{audiobook.title}</p>

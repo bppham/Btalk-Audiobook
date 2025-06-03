@@ -1,122 +1,123 @@
-.home{
-    flex: 1;
-    margin: 20px;
-    overflow-x: hidden;
+.home {
+  flex: 1;
+  margin: 20px;
+  overflow-x: hidden;
 }
 
-.new-audiobooks{
-    margin-bottom: 70px;
+.new-audiobooks {
+  margin-bottom: 70px;
 }
 
-.new-audiobooks .title{
-    background-color:#468d84;
-    padding: 5px 10px;
-    color: white;
-    border-radius: 4px;
-    margin-bottom: 20px;
+.new-audiobooks .title {
+  background-color: #468d84;
+  padding: 5px 10px;
+  color: white;
+  border-radius: 4px;
+  margin-bottom: 20px;
 }
 
-.new-audiobooks .audiobook-container{
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
+.new-audiobooks .audiobook-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
 }
 
-.new-audiobooks .audiobook-container .audiobook-item{
-    width: 100%;
-    background-color: rgb(41, 43, 50);
-    border-radius: 10px;
-    padding: 5px;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+.new-audiobooks .audiobook-container .audiobook-item {
+  width: 100%;
+  background-color: rgb(227 227 227);
+  border-radius: 10px;
+  padding: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.new-audiobooks .audiobook-container .audiobook-item:hover{
-    color: #468d84;
-    cursor: pointer;
-    font-weight: bolder;
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+.new-audiobooks .audiobook-container .audiobook-item:hover {
+  color: #468d84;
+  cursor: pointer;
+  font-weight: bolder;
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-.new-audiobooks .book-image{
-    position: relative;
-    width: 100%;
-    padding-top: 100%;
-    overflow: hidden;
-    background-color: rgb(41, 43, 50);
-    border-radius: 8px;
+.new-audiobooks .book-image {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  overflow: hidden;
+  background-color: rgb(41, 43, 50);
+  border-radius: 8px;
 }
 
-.new-audiobooks .book-image img{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    top: 0;
-    left: 0;
-    transition: transform 0.3s ease;
+.new-audiobooks .book-image img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  top: 0;
+  left: 0;
+  transition: transform 0.3s ease;
 }
 
 .new-audiobooks .book-image:hover img {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
-.new-audiobooks .book-title{
-    font-size: 16px;
-    line-height: 1.4;
-    font-weight: bold;
-    font-family: "SF UI Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    padding: 15px 10px;
-    border-radius: 0 0 6px 6px;
-    text-align: center;
+.new-audiobooks .book-title {
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: bold;
+  font-family: "SF UI Display", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+  padding: 15px 10px;
+  border-radius: 0 0 6px 6px;
+  text-align: center;
 }
 
 .new-audiobooks .book-title p {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    min-height: 44px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  min-height: 44px;
 }
 
 /* Responsive styles */
 @media (max-width: 1200px) {
-    .new-audiobooks .audiobook-container {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    }
+  .new-audiobooks .audiobook-container {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
-    .home {
-        margin: 15px;
-    }
+  .home {
+    margin: 15px;
+  }
 
-    .new-audiobooks .audiobook-container {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 15px;
-    }
+  .new-audiobooks .audiobook-container {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+  }
 
-    .new-audiobooks .book-title {
-        font-size: 14px;
-        padding: 12px 8px;
-    }
+  .new-audiobooks .book-title {
+    font-size: 14px;
+    padding: 12px 8px;
+  }
 }
 
 @media (max-width: 480px) {
-    .home {
-        margin: 10px;
-    }
+  .home {
+    margin: 10px;
+  }
 
-    .new-audiobooks .audiobook-container {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        gap: 10px;
-    }
+  .new-audiobooks .audiobook-container {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+  }
 
-    .new-audiobooks .title {
-        font-size: 16px;
-        padding: 4px 8px;
-    }
+  .new-audiobooks .title {
+    font-size: 16px;
+    padding: 4px 8px;
+  }
 }

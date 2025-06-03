@@ -13,15 +13,11 @@ const AudiobookPlayer = ({audioFiles = []}) => {
     const audioRef = useRef(null);
     const [playlist, setPlaylist] = useState([]);
 
-    const handleFileUrl = (url) => {
-        return "http://localhost:8080/files/" + url;
-    }
-
     useEffect(() => {
         if (audioFiles.length === 0) return;
 
         const audio = audioRef.current;
-        audio.src = handleFileUrl(audioFiles[currentTrack].fileUrl); // ✅ Sử dụng fileUrl thay vì src
+        audio.src = audioFiles[currentTrack].fileUrl; // ✅ Sử dụng fileUrl thay vì src
 
         const updateTime = () => setCurrentTime(audio.currentTime);
         const updateDuration = () => setDuration(audio.duration);
@@ -120,7 +116,7 @@ const AudiobookPlayer = ({audioFiles = []}) => {
                     </li>
                 ))}
             </ul>
-            <audio ref={audioRef} src={handleFileUrl(playlist[currentTrack]?.fileUrl)} loop={isLooping}></audio>
+            <audio ref={audioRef} src={playlist[currentTrack]?.fileUrls} loop={isLooping}></audio>
         </div>
     );
 };

@@ -30,8 +30,8 @@ public class AudioBookService {
     private String defaultBookCover;
     final AudioBookMapper audioBookMapper;
     final AudioBookRepository audioBookRepository;
-    final AudioFileRepository audioFileRepository;
-    final FileStorageService fileStorageService;
+    final LikeRepository likeRepository;
+    final RatingRepository ratingRepository;
 
     final AuthorRepository authorRepository;
     final VoiceRepository voiceRepository;
@@ -82,11 +82,33 @@ public class AudioBookService {
         return audioBookMapper.toAudioBookResponse(savedAudioBook);
     }
 
-    public AudioBookResponse getAudioBookById(Long id) {
+    public AudioBookResponse getAudioBookById(Long id, Long userId) {
         AudioBook audioBook = audioBookRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.AUDIOBOOK_NOT_FOUND));
-        return audioBookMapper.toAudioBookResponse(audioBook);
+
+        AudioBookResponse response = audioBookMapper.toAudioBookResponse(audioBook);
+
+        response.setLikeCount(likeRepository.countByAudioBook(audioBook));
+        response.setLikedByCurrentUser(
+                userId != null && likeRepository.existsByUserIdAndAudioBookId(userId, audioBook.getId())
+        );
+
+        // Đánh giá
+        List<Rating> allRatings = ratingRepository.findAllByAudioBook(audioBook);
+        response.setRatingCount(allRatings.size());
+        response.setAverageRating(
+                allRatings.stream().mapToDouble(Rating::getValue).average().orElse(0.0)
+        );
+
+        // Đánh giá của người dùng hiện tại (nếu có)
+        if (userId != null) {
+            ratingRepository.findByUserIdAndAudioBookId(userId, id)
+                    .ifPresent(rating -> response.setUserRating(rating.getValue()));
+        }
+
+        return response;
     }
+
 
     public List<AudioBookResponse> getAllAudioBooks() {
         return audioBookRepository.findAll().stream().map(audioBook -> {

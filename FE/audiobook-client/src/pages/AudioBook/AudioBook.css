@@ -1,253 +1,296 @@
-.audiobook{
-    flex: 1;
-    margin: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.audiobook {
+  flex: 1;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 /* quick-information */
-.audiobook .quick-information{
-    display: flex;
-    gap: 20px;
+.audiobook .quick-information {
+  display: flex;
+  gap: 20px;
 }
 
-.audiobook .quick-information .book-cover{
-    flex: 1;
-    max-width: 300px;
+.audiobook .quick-information .book-cover {
+  flex: 1;
+  max-width: 300px;
 }
 
-.audiobook .quick-information .book-cover img{
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+.audiobook .quick-information .book-cover img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.audiobook .quick-information .info-container{
-    flex: 4;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    background-color: #f5efef;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+.audiobook .quick-information .info-container {
+  flex: 4;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5efef;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.audiobook .quick-information .info-container .info-section{
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    flex: 5;
+.audiobook .quick-information .info-container .info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 5;
 }
 
-.audiobook .quick-information .info-container .info-section .title{
-    margin-bottom: 10px;
-    font-size: 24px;
-    color: #2c5364;
+.audiobook .quick-information .info-container .info-section .title {
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #2c5364;
 }
 
-.audiobook .quick-information .info-container .info-section .detail{
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.audiobook .quick-information .info-container .info-section .detail {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.audiobook .quick-information .info-container .info-section .detail .item{
-    display: flex;
-    gap: 10px;
-    font-size: 16px;
-    align-items: center;
+.audiobook .quick-information .info-container .info-section .detail .item {
+  display: flex;
+  gap: 10px;
+  font-size: 16px;
+  align-items: center;
 }
 
-.audiobook .quick-information .info-container .info-section .detail label{
-    font-weight: bold;
-    color: #2c5364;
-    display: flex;
-    gap: 5px;
-    align-items: center;
+.audiobook .quick-information .info-container .info-section .detail label {
+  font-weight: bold;
+  color: #2c5364;
+  display: flex;
+  gap: 5px;
+  align-items: center;
 }
 
-.audiobook .quick-information .info-container .action-section{
-    flex: 1;
-    align-items: center;
-    font-size: 18px;
-    border-top: 1px solid #ccc;
-    padding-top: 15px;
-    padding-left: 10px;
-    margin-top: auto;
+.audiobook .quick-information .info-container .action-section {
+  flex: 1;
+  align-items: center;
+  font-size: 18px;
+  border-top: 1px solid #ccc;
+  padding-top: 15px;
+  padding-left: 10px;
+  margin-top: auto;
 }
 
-.audiobook .quick-information .info-container .action-section button{
-    display: flex;
-    align-items: center;
-    font-size: 18px;
-    font-weight: bold;
-    gap: 10px;
-    background-color: transparent;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    transition: all 0.3s ease;
+.audiobook .quick-information .info-container .action-section button {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  gap: 10px;
+  background-color: transparent;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
 }
 
-.audiobook .quick-information .info-container .action-section button:hover{
-    cursor: pointer;
-    color: #2c5364;
-    background-color: rgba(44, 83, 100, 0.1);
+.audiobook .quick-information .info-container .action-section button:hover {
+  cursor: pointer;
+  color: #2c5364;
+  background-color: rgba(44, 83, 100, 0.1);
+}
+
+.audiobook .quick-information .info-container .action-section .like-section {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.audiobook .quick-information .info-container .action-section .like-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.audiobook
+  .quick-information
+  .info-container
+  .action-section
+  .like-button.liked {
+  color: #ffffff;
+  background-color: #1a4caa;
+  border-radius: 6px;
+}
+
+/* Hover khi đã like: làm sáng nhẹ */
+.audiobook
+  .quick-information
+  .info-container
+  .action-section
+  .like-button.liked:hover {
+  background-color: #345fbb;
 }
 
 /* rating */
-.rating{
-    display: flex;
-    gap: 30px;
-    padding: 15px;
-    background-color: #f5efef;
-    border-radius: 8px;
-    align-items: center;
+.rating {
+  display: flex;
+  gap: 30px;
+  padding: 15px;
+  background-color: #f5efef;
+  border-radius: 8px;
+  align-items: center;
 }
 
-.rating .score-average{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
+.rating .score-average {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
 }
 
-.rating .score-average .score{
-    padding: 10px 15px;
-    background-color: #2c5364;
-    font-size: 18px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    border-radius: 50%;
-    min-width: 45px;
+.rating .score-average .score {
+  padding: 10px 15px;
+  background-color: #2c5364;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border-radius: 50%;
+  min-width: 45px;
 }
 
-.rating .score-average .vote-count{
-    font-style: italic;
-    color: #666;
+.rating .score-average .vote-count {
+  font-style: italic;
+  color: #666;
 }
 
-.rating .rating-section{
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    align-items: center;
+.rating .rating-section {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
 }
 
-.rating .rating-section .rating-text{
-    font-weight: bold;
-    color: #2c5364;
+.rating .rating-section .rating-text {
+  font-weight: bold;
+  color: #2c5364;
 }
 
 /* audio player */
-.audiobook-section{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.audiobook-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 /* description and note */
-.description-container, .note-container {
-    background-color: #f5efef;
-    border: none;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+.description-container,
+.note-container {
+  background-color: #f5efef;
+  border: none;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.description-container legend, .note-container legend{
-    color: #2c5364;
-    font-weight: bold;
-    font-size: 20px;
-    margin-bottom: 15px;
+.description-container legend,
+.note-container legend {
+  color: #2c5364;
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 15px;
 }
 
-.description-container p, .note-container p{
-    font-size: 16px;
-    line-height: 1.6;
-    color: #333;
+.description-container p,
+.note-container p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
 }
 
 /* Responsive styles */
 @media (max-width: 992px) {
-    .audiobook .quick-information {
-        flex-direction: column;
-    }
+  .audiobook .quick-information {
+    flex-direction: column;
+  }
 
-    .audiobook .quick-information .book-cover {
-        max-width: 100%;
-    }
+  .audiobook .quick-information .book-cover {
+    max-width: 100%;
+  }
 
-    .audiobook .quick-information .book-cover img {
-        max-width: 300px;
-        margin: 0 auto;
-        display: block;
-    }
+  .audiobook .quick-information .book-cover img {
+    max-width: 300px;
+    margin: 0 auto;
+    display: block;
+  }
 
-    .audiobook .quick-information .info-container {
-        padding: 15px;
-    }
+  .audiobook .quick-information .info-container {
+    padding: 15px;
+  }
 
-    .audiobook .quick-information .info-container .info-section .title {
-        font-size: 20px;
-    }
+  .audiobook .quick-information .info-container .info-section .title {
+    font-size: 20px;
+  }
 }
 
 @media (max-width: 768px) {
-    .audiobook {
-        margin: 15px;
-    }
+  .audiobook {
+    margin: 15px;
+  }
 
-    .rating {
-        flex-direction: column;
-        gap: 20px;
-        padding: 15px;
-    }
+  .rating {
+    flex-direction: column;
+    gap: 20px;
+    padding: 15px;
+  }
 
-    .rating .rating-section {
-        flex-direction: column;
-        gap: 15px;
-    }
+  .rating .rating-section {
+    flex-direction: column;
+    gap: 15px;
+  }
 
-    .description-container, .note-container {
-        padding: 15px;
-    }
+  .description-container,
+  .note-container {
+    padding: 15px;
+  }
 
-    .description-container legend, .note-container legend {
-        font-size: 18px;
-    }
+  .description-container legend,
+  .note-container legend {
+    font-size: 18px;
+  }
 
-    .description-container p, .note-container p {
-        font-size: 14px;
-    }
+  .description-container p,
+  .note-container p {
+    font-size: 14px;
+  }
 }
 
 @media (max-width: 480px) {
-    .audiobook {
-        margin: 10px;
-        gap: 15px;
-    }
+  .audiobook {
+    margin: 10px;
+    gap: 15px;
+  }
 
-    .audiobook .quick-information .info-container .info-section .detail .item {
-        font-size: 14px;
-    }
+  .audiobook .quick-information .info-container .info-section .detail .item {
+    font-size: 14px;
+  }
 
-    .audiobook .quick-information .info-container .action-section {
-        font-size: 16px;
-    }
+  .audiobook .quick-information .info-container .action-section {
+    font-size: 16px;
+  }
 
-    .audiobook .quick-information .info-container .action-section button {
-        font-size: 16px;
-    }
+  .audiobook .quick-information .info-container .action-section button {
+    font-size: 16px;
+  }
 
-    .rating .score-average .score {
-        font-size: 16px;
-        padding: 8px 12px;
-    }
+  .rating .score-average .score {
+    font-size: 16px;
+    padding: 8px 12px;
+  }
 }
