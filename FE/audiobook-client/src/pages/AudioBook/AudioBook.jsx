@@ -52,6 +52,8 @@ const AudioBook = () => {
       setRatinigAverage(result.averageRating);
 
       setIsSaved(result.savedByCurrentUser || false);
+
+      setListenCount(result.listenCount);
     } catch (error) {
       console.error("Error fetching audiobook: " + error);
     }
@@ -139,6 +141,9 @@ const AudioBook = () => {
     }
   };
 
+  // Listen count
+  const [listenCount, setListenCount] = useState(0);
+
   return (
     <div className="audiobook">
       <div className="quick-information">
@@ -176,7 +181,7 @@ const AudioBook = () => {
                   {" "}
                   <FontAwesomeIcon icon={faHeadphones} /> Lượt nghe:{" "}
                 </label>
-                <p>300</p>
+                <p>{listenCount}</p>
               </div>
             </div>
           </div>
@@ -218,7 +223,7 @@ const AudioBook = () => {
         </div>
       </div>
       <div className="audiobook-section">
-        <AudiobookPlayer audioFiles={audioFiles} />
+        <AudiobookPlayer audioFiles={audioFiles} audioBookId={id}/>
       </div>
       <fieldset className="description-container">
         <legend>Mô tả</legend>

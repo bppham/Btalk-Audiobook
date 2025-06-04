@@ -7,6 +7,7 @@ import AudioBook from './pages/AudioBook/AudioBook';
 import Login from './pages/Authentication/Login/Login';
 import Register from './pages/Authentication/Register/Register'
 import Library from './pages/Library/Library'
+import History from './pages/History/History';
 
 function MainLayout() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/:id" element={<AudioBook />} />
           <Route path="/library" element={<Library />} />
+          <Route path="/history" element={<History />} />
         </Route>
       </Routes>
     </Router>

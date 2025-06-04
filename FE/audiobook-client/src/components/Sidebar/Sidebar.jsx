@@ -64,10 +64,12 @@ const Sidebar = () => {
               <h2>Thư viện</h2>
             </div>
           </Link>
-          <div className="sidebar-item" onClick={closeMobileMenu}>
-            <FontAwesomeIcon icon={faHeadphones} />
-            <h2>Đang nghe</h2>
-          </div>
+          <Link to="/history" className="link" onClick={closeMobileMenu}>
+            <div className="sidebar-item">
+              <FontAwesomeIcon icon={faHeadphones} />
+              <h2>Đã nghe</h2>
+            </div>
+          </Link>
           <div className="sidebar-item" onClick={closeMobileMenu}>
             <FontAwesomeIcon icon={faRankingStar} />
             <h2>Xếp hạng</h2>

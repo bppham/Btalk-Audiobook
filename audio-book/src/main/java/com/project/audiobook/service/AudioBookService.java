@@ -8,14 +8,12 @@ import com.project.audiobook.exception.AppException;
 import com.project.audiobook.exception.ErrorCode;
 import com.project.audiobook.mapper.AudioBookMapper;
 import com.project.audiobook.repository.*;
-import com.project.audiobook.utils.HandleFile;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,10 +108,8 @@ public class AudioBookService {
         response.setSavedByCurrentUser(
                 userId != null && libraryRepositry.existsByUserIdAndAudioBookId(userId, audioBook.getId())
         );
-
         return response;
     }
-
 
     public List<AudioBookResponse> getAllAudioBooks() {
         return audioBookRepository.findAll().stream().map(audioBook -> {
@@ -121,7 +117,6 @@ public class AudioBookService {
             if (audioBook.getImage() != null) {
                 response.setImage(audioBook.getImage());
             }
-
             return response;
         }).toList();
     }
@@ -200,6 +195,5 @@ public class AudioBookService {
         AudioBook updated = audioBookRepository.save(audioBook);
         return audioBookMapper.toAudioBookResponse(updated);
     }
-
 
 }

@@ -58,4 +58,7 @@ public class AudioBook {
     @OneToMany(mappedBy = "audioBook", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Library> savedByUsers = new ArrayList<>();
 
+    @Column(nullable = false)
+    private Long listenCount = 0L;
+
 }

@@ -52,6 +52,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin-bottom: 20px;
 }
 
 .audiobook .quick-information .info-container .info-section .detail .item {

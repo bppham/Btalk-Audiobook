@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/files/**").permitAll()
                         .requestMatchers("/likes/**").authenticated()
                         .requestMatchers("/ratings/**").authenticated()
+                        .requestMatchers("/listen/**").permitAll()
                         .anyRequest().authenticated() // Các endpoint khác cần đăng nhập
                 )
                 .cors(cors -> cors.configurationSource(request -> {
