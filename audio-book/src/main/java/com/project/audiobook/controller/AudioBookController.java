@@ -1,19 +1,15 @@
 package com.project.audiobook.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.audiobook.dto.request.AudioBook.AudioBookRequest;
 import com.project.audiobook.dto.response.ApiResponse;
 import com.project.audiobook.dto.response.Audiobook.AudioBookResponse;
+import com.project.audiobook.dto.response.Audiobook.UserAudioBookResponse;
 import com.project.audiobook.service.AudioBookService;
 import com.project.audiobook.utils.JwtRequestUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -47,19 +43,25 @@ public class AudioBookController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<AudioBookResponse> getAudioBookById(
+    public ApiResponse<? extends AudioBookResponse> getAudioBookById(
             @PathVariable Long id,
             HttpServletRequest request
     ) {
         Long userId = null;
         try {
             userId = jwtRequestUtil.getUserIdFromRequest(request);
-        } catch (Exception e) {
-            // Không có token hoặc token sai, thì userId vẫn null → OK
+        } catch (Exception ignored) {
+            // Token lỗi hoặc không có, bỏ qua
+        }
+
+        if (userId != null) {
+            return ApiResponse.<UserAudioBookResponse>builder()
+                    .result(audioBookService.getAudioBookByIdForUser(id, userId))
+                    .build();
         }
 
         return ApiResponse.<AudioBookResponse>builder()
-                .result(audioBookService.getAudioBookById(id, userId))
+                .result(audioBookService.getAudioBookById(id))
                 .build();
     }
 

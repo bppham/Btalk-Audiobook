@@ -3,11 +3,14 @@ package com.project.audiobook.service;
 import com.project.audiobook.dto.request.AudioBook.AudioBookRequest;
 import com.project.audiobook.dto.request.AudioFile.AudioFileRequest;
 import com.project.audiobook.dto.response.Audiobook.AudioBookResponse;
+import com.project.audiobook.dto.response.Audiobook.UserAudioBookResponse;
 import com.project.audiobook.entity.*;
 import com.project.audiobook.exception.AppException;
 import com.project.audiobook.exception.ErrorCode;
 import com.project.audiobook.mapper.AudioBookMapper;
+import com.project.audiobook.mapper.UserAudioBookMapper;
 import com.project.audiobook.repository.*;
+import com.project.audiobook.utils.AudiobookUtil;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +30,17 @@ public class AudioBookService {
     @Value("${app.default-book-cover-url}")
     private String defaultBookCover;
     final AudioBookMapper audioBookMapper;
+    final UserAudioBookMapper userAudioBookMapper;
     final AudioBookRepository audioBookRepository;
     final LikeRepository likeRepository;
     final RatingRepository ratingRepository;
-    final LibraryRepositry libraryRepositry;
+    final LibraryRepository libraryRepositry;
 
     final AuthorRepository authorRepository;
     final VoiceRepository voiceRepository;
     final CategoryRepository categoryRepository;
+
+    final AudiobookUtil audiobookUtil;
 
     @Transactional
     public AudioBookResponse createRequest(AudioBookRequest request) {
@@ -81,39 +87,28 @@ public class AudioBookService {
         return audioBookMapper.toAudioBookResponse(savedAudioBook);
     }
 
-    public AudioBookResponse getAudioBookById(Long id, Long userId) {
+    public AudioBookResponse getAudioBookById(Long id) {
         AudioBook audioBook = audioBookRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.AUDIOBOOK_NOT_FOUND));
 
         AudioBookResponse response = audioBookMapper.toAudioBookResponse(audioBook);
+        audiobookUtil.enrichAudioBookResponse(response, audioBook);
 
-        response.setLikeCount(likeRepository.countByAudioBook(audioBook));
-        response.setLikedByCurrentUser(
-                userId != null && likeRepository.existsByUserIdAndAudioBookId(userId, audioBook.getId())
-        );
+        return response;
+    }
 
-        // Đánh giá
-        List<Rating> allRatings = ratingRepository.findAllByAudioBook(audioBook);
-        response.setRatingCount(allRatings.size());
-        response.setAverageRating(
-                allRatings.stream().mapToDouble(Rating::getValue).average().orElse(0.0)
-        );
-
-        // Đánh giá của người dùng hiện tại (nếu có)
-        if (userId != null) {
-            ratingRepository.findByUserIdAndAudioBookId(userId, id)
-                    .ifPresent(rating -> response.setUserRating(rating.getValue()));
-        }
-        // Lưu vào thư viện của người dùng hiện tại (nếu có)
-        response.setSavedByCurrentUser(
-                userId != null && libraryRepositry.existsByUserIdAndAudioBookId(userId, audioBook.getId())
-        );
+    public UserAudioBookResponse getAudioBookByIdForUser(Long id, Long userId) {
+        AudioBook audioBook = audioBookRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.AUDIOBOOK_NOT_FOUND));
+        UserAudioBookResponse response = userAudioBookMapper.toAudioBookResponse(audioBook);
+        audiobookUtil.enrichUserAudioBookResponse(response, audioBook, userId);
         return response;
     }
 
     public List<AudioBookResponse> getAllAudioBooks() {
         return audioBookRepository.findAll().stream().map(audioBook -> {
             AudioBookResponse response = audioBookMapper.toAudioBookResponse(audioBook);
+            audiobookUtil.enrichAudioBookResponse(response, audioBook);
             if (audioBook.getImage() != null) {
                 response.setImage(audioBook.getImage());
             }

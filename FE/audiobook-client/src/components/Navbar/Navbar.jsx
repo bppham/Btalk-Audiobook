@@ -20,9 +20,6 @@ const Navbar = () => {
             <button>Tìm kiếm</button>
         </div>
         <div className="navbar-right">
-            <div className="favorite">
-                <FontAwesomeIcon icon={faBookmark} />
-            </div>
             <div className="account">
                 <FontAwesomeIcon icon={faCircleUser} />
             </div>

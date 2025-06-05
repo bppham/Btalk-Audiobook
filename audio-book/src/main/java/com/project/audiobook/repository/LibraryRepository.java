@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface LibraryRepositry extends JpaRepository<Library, Long> {
+public interface LibraryRepository extends JpaRepository<Library, Long> {
     Optional<Library> findByUserAndAudioBook(User user, AudioBook audioBook);
     List<Library> findAllByUser(User user);
     boolean existsByUserAndAudioBook(User user, AudioBook audioBook);

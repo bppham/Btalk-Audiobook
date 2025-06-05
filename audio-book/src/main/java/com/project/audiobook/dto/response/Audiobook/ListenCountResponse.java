@@ -12,4 +12,7 @@ import lombok.Setter;
 public class ListenCountResponse {
     private Long audioBookId;
     private Long listenCount;
+    private Long todayListenCount;
+    private Long monthListenCount;
+    private Long yearListenCount;
 }

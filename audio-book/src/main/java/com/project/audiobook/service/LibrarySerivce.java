@@ -9,7 +9,7 @@ import com.project.audiobook.exception.AppException;
 import com.project.audiobook.exception.ErrorCode;
 import com.project.audiobook.mapper.LibraryMapper;
 import com.project.audiobook.repository.AudioBookRepository;
-import com.project.audiobook.repository.LibraryRepositry;
+import com.project.audiobook.repository.LibraryRepository;
 import com.project.audiobook.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class LibrarySerivce {
-    LibraryRepositry libraryRepositry;
+    LibraryRepository libraryRepositry;
     UserRepository userRepository;
     AudioBookRepository audioBookRepository;
     LibraryMapper libraryMapper;

@@ -5,18 +5,20 @@ import com.project.audiobook.dto.response.Audiobook.ListenCountResponse;
 import com.project.audiobook.entity.*;
 import com.project.audiobook.exception.AppException;
 import com.project.audiobook.exception.ErrorCode;
-import com.project.audiobook.mapper.AudioBookMapper;
 import com.project.audiobook.mapper.HistoryMapper;
 import com.project.audiobook.repository.*;
+import com.project.audiobook.utils.AudiobookUtil;
+import com.project.audiobook.utils.StatType;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,14 +28,34 @@ public class ListenService {
     final ListenHistoryRepository listenHistoryRepository;
     final UserRepository userRepository;
     final HistoryMapper historyMapper;
+    private final AudiobookUtil listenUtil;
 
     @Transactional
     public ListenCountResponse increaseListenCount(Long audioBookId) {
         AudioBook audioBook = audioBookRepository.findById(audioBookId)
                 .orElseThrow(() -> new AppException(ErrorCode.AUDIOBOOK_NOT_FOUND));
+
+        // Tăng tổng
         audioBook.setListenCount(audioBook.getListenCount() + 1);
-        AudioBook updated = audioBookRepository.save(audioBook);
-        return new ListenCountResponse(audioBookId, updated.getListenCount());
+        audioBookRepository.save(audioBook);
+
+        // Ngày hiện tại
+        LocalDate today = LocalDate.now();
+        YearMonth currentMonth = YearMonth.from(today);
+        int currentYear = today.getYear();
+
+        // Tăng thống kê + lấy lại listenCount tương ứng
+        Long dayCount = listenUtil.updateAndGetStat(audioBook, StatType.DAILY, today, null, null);
+        Long monthCount = listenUtil.updateAndGetStat(audioBook, StatType.MONTHLY, null, currentMonth, null);
+        Long yearCount = listenUtil.updateAndGetStat(audioBook, StatType.YEARLY, null, null, currentYear);
+
+        return new ListenCountResponse(
+                audioBookId,
+                audioBook.getListenCount(),
+                dayCount,
+                monthCount,
+                yearCount
+        );
     }
 
     @Transactional
@@ -44,7 +66,7 @@ public class ListenService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         int count = listenHistoryRepository.countByUser(user);
-        if (count >= 2) {
+        if (count >= 10) {
             listenHistoryRepository.findFirstByUserOrderByListenedAtAsc(user)
                     .ifPresent(listenHistoryRepository::delete);
         }

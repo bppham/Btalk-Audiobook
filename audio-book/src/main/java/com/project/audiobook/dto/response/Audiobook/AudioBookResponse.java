@@ -1,6 +1,7 @@
 package com.project.audiobook.dto.response.Audiobook;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class AudioBookResponse {
     private Long id;
     private String title;
@@ -23,10 +24,10 @@ public class AudioBookResponse {
     private List<String> categoryNames;
     private List<AudioFileResponse> audioFiles;
     private Long likeCount;
-    private boolean likedByCurrentUser;
     private long ratingCount;
     private double averageRating;
-    private Double userRating;
-    private boolean savedByCurrentUser;
+    private Long dailyListenCount;
+    private Long monthlyListenCount;
+    private Long yearlyListenCount;
     private Long listenCount;
 }

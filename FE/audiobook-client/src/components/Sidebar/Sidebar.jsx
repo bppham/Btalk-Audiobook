@@ -70,10 +70,12 @@ const Sidebar = () => {
               <h2>Đã nghe</h2>
             </div>
           </Link>
-          <div className="sidebar-item" onClick={closeMobileMenu}>
-            <FontAwesomeIcon icon={faRankingStar} />
-            <h2>Xếp hạng</h2>
-          </div>
+          <Link to="/ranking" className="link" onClick={closeMobileMenu}>
+            <div className="sidebar-item">
+              <FontAwesomeIcon icon={faRankingStar} />
+              <h2>Xếp hạng</h2>
+            </div>
+          </Link>
           <div
             className="sidebar-item category"
             onClick={() => setShowCategories(!showCategories)}
