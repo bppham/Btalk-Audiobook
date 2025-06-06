@@ -137,6 +137,42 @@
   background-color: #2ea84a;
 }
 
+/* Responsive styles for Register */
+@media (max-width: 900px) {
+  .register-form {
+    padding: 20px 10px;
+    width: 98vw;
+    min-width: 0;
+  }
+  .register-section {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .left, .right {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .register-container {
+    padding: 10px;
+  }
+  .register-form {
+    padding: 10px 2vw;
+    border-radius: 0;
+  }
+  .avatar-preview img {
+    width: 70px;
+    height: 70px;
+  }
+  .action button {
+    font-size: 15px;
+    padding: 8px 10px;
+    border-radius: 8px;
+  }
+}
+
 @media (max-width: 992px) {
   .register-form {
     padding: 30px;

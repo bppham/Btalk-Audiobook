@@ -107,3 +107,29 @@
 .register-link a:hover {
   text-decoration: underline;
 }
+
+/* Responsive styles for Login */
+@media (max-width: 600px) {
+  .auth-container {
+    padding: 0;
+    min-height: 100vh;
+  }
+  .auth-box {
+    width: 98vw;
+    min-width: 0;
+    padding: 16px 6px;
+    border-radius: 0;
+  }
+  .auth-form input {
+    font-size: 15px;
+    padding: 10px 8px;
+  }
+  .login-btn, .google-btn {
+    font-size: 15px;
+    padding: 10px 0;
+    width: 100%;
+  }
+  .separator {
+    margin: 12px 0;
+  }
+}

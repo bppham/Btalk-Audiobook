@@ -21,6 +21,7 @@ import {
   faCalendarAlt,
   faChevronLeft,
   faChevronRight,
+  faThumbsUp
 } from "@fortawesome/free-solid-svg-icons";
 
 const PAGE_SIZE = 10;
@@ -38,7 +39,7 @@ const Ranking = () => {
     { id: "month", label: "Tháng", icon: faCalendarAlt, fetch: getTopByMonth },
     { id: "year", label: "Năm", icon: faCalendarAlt, fetch: getTopByYear },
     { id: "all", label: "Tất cả", icon: faEarListen, fetch: getTopByAll },
-    { id: "likes", label: "Yêu thích", icon: faEarListen, fetch: getTopByLikes },
+    { id: "likes", label: "Yêu thích", icon: faThumbsUp, fetch: getTopByLikes },
     { id: "rating", label: "Đánh giá", icon: faStar, fetch: getTopByRating },
   ];
 
@@ -157,7 +158,7 @@ const Ranking = () => {
                           {book.averageRating?.toFixed(1) || "N/A"}
                         </span>
                         <span>
-                          <FontAwesomeIcon icon={faEarListen} /> {book.likeCount || 0}
+                          <FontAwesomeIcon icon={faThumbsUp} /> {book.likeCount || 0}
                         </span>
                       </div>
                     </div>

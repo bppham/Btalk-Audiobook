@@ -5,12 +5,17 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
+import com.project.audiobook.dto.request.ForgetPassword.ForgetPasswordRequest;
+import com.project.audiobook.dto.request.ForgetPassword.ResetPasswordRequest;
+import com.project.audiobook.dto.request.ForgetPassword.VerifyCodeRequest;
 import com.project.audiobook.dto.request.Login.LoginRequest;
 import com.project.audiobook.dto.request.Login.LoginWithGoogleRequest;
 import com.project.audiobook.dto.request.Login.RegisterRequest;
+import com.project.audiobook.dto.response.Auth.ForgetPasswordResponse;
 import com.project.audiobook.dto.response.Auth.LoginResponse;
+import com.project.audiobook.dto.response.Auth.ResetPasswordResponse;
+import com.project.audiobook.dto.response.Auth.VerifyCodeResponse;
 import com.project.audiobook.dto.response.User.UserResponse;
-import com.project.audiobook.entity.Employee;
 import com.project.audiobook.entity.User;
 import com.project.audiobook.exception.AppException;
 import com.project.audiobook.exception.ErrorCode;
@@ -28,6 +33,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 @Service
@@ -130,5 +137,53 @@ public class UserAuthService {
             e.printStackTrace();
             throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public ForgetPasswordResponse forgetPassword(ForgetPasswordRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        String rawCode = verifyCodeUtil.generateRawCode();
+        String hashCode = verifyCodeUtil.hashCode(rawCode);
+        emailUtil.sendVerificationEmail(request.getEmail(), rawCode, "CLIENT");
+        user.setVerifyCode(hashCode);
+        user.setVerifyCodeCreatedAt(LocalDateTime.now());
+        userRepository.save(user);
+
+        ForgetPasswordResponse response = new ForgetPasswordResponse();
+        response.setEmail(user.getEmail());
+        return response;
+    }
+
+    public VerifyCodeResponse verifyCode(VerifyCodeRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        // Kiểm tra thời gian hết hạn mã
+        if (user.getVerifyCodeCreatedAt() == null ||
+                Duration.between(user.getVerifyCodeCreatedAt(), LocalDateTime.now()).toMinutes() >= 2) {
+            throw new AppException(ErrorCode.EXPIRED_VERIFY_CODE);
+        }
+
+        // Kiểm tra mã có khớp không
+        if (!passwordEncoder.matches(request.getCode(), user.getVerifyCode())) {
+            throw new AppException(ErrorCode.INVALID_VERIFY_CODE);
+        }
+        VerifyCodeResponse response = new VerifyCodeResponse();
+        response.setEmail(user.getEmail());
+        return response;
+    }
+
+    public ResetPasswordResponse resetPassword (ResetPasswordRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        String newPassword = request.getPassword();
+        String hashPassword = passwordEncoder.encode(newPassword);
+
+        user.setPassword(hashPassword);
+        userRepository.save(user);
+
+        ResetPasswordResponse response = new ResetPasswordResponse();
+        response.setEmail(user.getEmail());
+        return response;
     }
 }

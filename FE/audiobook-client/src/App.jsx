@@ -9,6 +9,9 @@ import Register from './pages/Authentication/Register/Register'
 import Library from './pages/Library/Library'
 import History from './pages/History/History';
 import Ranking from './pages/Ranking/Ranking';
+import ForgetPassword from './pages/Authentication/ForgetPassword/ForgetPassword';
+import VerifyCode from './pages/Authentication/VerifyCode/VerifyCode';
+import ResetPassword from './pages/Authentication/ResetPassword/ResetPassword';
 
 function MainLayout() {
   return (
@@ -28,6 +31,9 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forget-password" element={<ForgetPassword />} />
+        <Route path="/verify-code" element={<VerifyCode />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         
         {/* Route có layout */}
         <Route element={<MainLayout />}>

@@ -83,7 +83,7 @@ const Login = () => {
             required
           />
           <div className="auth-links">
-            <a href="/forgot-password">Quên mật khẩu?</a>
+            <a href="/forget-password">Quên mật khẩu?</a>
           </div>
           <button type="submit" className="login-btn">
             Đăng nhập

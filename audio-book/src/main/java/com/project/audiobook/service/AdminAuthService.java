@@ -57,7 +57,7 @@ public class AdminAuthService {
                 .orElseThrow(() -> new AppException(ErrorCode.INVALID_EMPLOYEE_EMAIL));
         String rawCode = verifyCodeUtil.generateRawCode();
         String hashCode = verifyCodeUtil.hashCode(rawCode);
-        emailUtil.sendVerificationEmail(request.getEmail(), rawCode);
+        emailUtil.sendVerificationEmail(request.getEmail(), rawCode, "EMPLOYEE");
         employee.setVerifyCode(hashCode);
         employee.setVerifyCodeCreatedAt(LocalDateTime.now());
         employeeRepository.save(employee);

@@ -65,18 +65,25 @@ public class ListenService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
+        // Xóa lịch sử cũ nếu đã nghe audiobook này
+        listenHistoryRepository.findByUserAndAudioBook(user, audioBook)
+                .ifPresent(listenHistoryRepository::delete);
+
+        // Nếu đã đủ 10 lịch sử, xóa bản cũ nhất (trừ khi vừa xóa ở trên rồi còn < 10)
         int count = listenHistoryRepository.countByUser(user);
         if (count >= 10) {
             listenHistoryRepository.findFirstByUserOrderByListenedAtAsc(user)
                     .ifPresent(listenHistoryRepository::delete);
         }
 
+        // Tạo bản ghi mới và lưu
         ListenHistory history = new ListenHistory();
         history.setUser(user);
         history.setAudioBook(audioBook);
         history.setListenedAt(LocalDateTime.now());
         listenHistoryRepository.save(history);
     }
+
 
     @Transactional
     public List<HistoryResponse> getUserListenHistory(Long userId) {

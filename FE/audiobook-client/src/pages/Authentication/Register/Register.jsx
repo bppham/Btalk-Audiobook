@@ -129,7 +129,7 @@ const Register = () => {
               </div>
             </div>
             <div className="action">
-              <button>Quay lại</button>
+              <button type="button" onClick={() => navigate("/login")}>Quay lại</button>
               <button type="submit">Đăng ký</button>
             </div>
           </div>
