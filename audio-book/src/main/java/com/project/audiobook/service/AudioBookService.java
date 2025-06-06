@@ -16,6 +16,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -189,6 +192,18 @@ public class AudioBookService {
 
         AudioBook updated = audioBookRepository.save(audioBook);
         return audioBookMapper.toAudioBookResponse(updated);
+    }
+
+    public Page<AudioBookResponse> searchAudioBooks(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return audioBookRepository.searchByKeyword(keyword, pageable)
+                .map(audioBookMapper::toAudioBookResponse);
+    }
+
+    public Page<AudioBookResponse> getByCategoryId(Long categoryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return audioBookRepository.findByCategoryId(categoryId, pageable)
+                .map(audioBookMapper::toAudioBookResponse);
     }
 
 }

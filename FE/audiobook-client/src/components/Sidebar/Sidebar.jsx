@@ -1,5 +1,6 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBook,
@@ -12,33 +13,28 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { listCategories } from "../../services/CategoryService";
 import "./Sidebar.css";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const [showCategories, setShowCategories] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const categories = [
-    "Tiểu thuyết",
-    "Truyện tranh",
-    "Kinh tế",
-    "Lập trình",
-    "Tâm lý",
-    "Tiểu thuyết",
-    "Truyện tranh",
-    "Kinh tế",
-    "Lập trình",
-    "Tâm lý",
-    "Tiểu thuyết",
-    "Truyện tranh",
-    "Kinh tế",
-    "Lập trình",
-    "Tâm lý",
-    "Tiểu thuyết",
-    "Truyện tranh",
-    "Kinh tế",
-    "Lập trình",
-    "Tâm lý1",
-  ];
+
+  const [categories, setCategories] = useState([]);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await listCategories();
+      setCategories(response.data.result);
+    } catch (error) {
+      console.error("Error fetching audiobooks:", error);
+      toast.error("Failed to load audiobooks!");
+    }
+  };
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -89,13 +85,20 @@ const Sidebar = () => {
           </div>
           {showCategories && (
             <div className="category-list">
-              {categories.map((category, index) => (
+              {categories.map((category) => (
                 <div
-                  key={index}
+                  key={category.id}
                   className="category-item"
-                  onClick={closeMobileMenu}
+                  onClick={() => {
+                    closeMobileMenu();
+                    navigate(
+                      `/category/${category.id}?name=${encodeURIComponent(
+                        category.name
+                      )}`
+                    );
+                  }}
                 >
-                  {category}
+                  {category.name}
                 </div>
               ))}
             </div>

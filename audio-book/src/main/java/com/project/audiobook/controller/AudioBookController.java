@@ -9,6 +9,7 @@ import com.project.audiobook.utils.JwtRequestUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,20 +31,20 @@ public class AudioBookController {
 
     @PutMapping(value = "/{id}")
     ApiResponse<AudioBookResponse> updateAudioBook(@Valid
-            @PathVariable Long id, @RequestBody AudioBookRequest request) {
+                                                   @PathVariable Long id, @RequestBody AudioBookRequest request) {
         return ApiResponse.<AudioBookResponse>builder()
                 .result(audioBookService.updateAudioBook(id, request))
                 .build();
     }
 
     @DeleteMapping(value = "/{id}")
-    public ApiResponse<String> deleteAudioBook(@PathVariable Long id) {
+    ApiResponse<String> deleteAudioBook(@PathVariable Long id) {
         audioBookService.deleteAudioBook(id);
         return ApiResponse.<String>builder().result("Audio book has been deleted").build();
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<? extends AudioBookResponse> getAudioBookById(
+    ApiResponse<? extends AudioBookResponse> getAudioBookById(
             @PathVariable Long id,
             HttpServletRequest request
     ) {
@@ -66,11 +67,28 @@ public class AudioBookController {
     }
 
     @GetMapping
-    public ApiResponse<List<AudioBookResponse>> getAllAudioBook() {
+    ApiResponse<List<AudioBookResponse>> getAllAudioBook() {
         return ApiResponse.<List<AudioBookResponse>>builder()
                 .result(audioBookService.getAllAudioBooks())
                 .build();
     }
 
+    @GetMapping("/search")
+    ApiResponse<Page<AudioBookResponse>> search(@RequestParam String keyword, @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<Page<AudioBookResponse>>builder()
+                .result(audioBookService.searchAudioBooks(keyword, page, size))
+                .build();
+    }
+
+    @GetMapping("/filter/category/{categoryId}")
+    public ApiResponse<Page<AudioBookResponse>> getByCategory(
+            @PathVariable Long categoryId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<Page<AudioBookResponse>>builder()
+                .result(audioBookService.getByCategoryId(categoryId, page, size))
+                .build();
+    }
 
 }
