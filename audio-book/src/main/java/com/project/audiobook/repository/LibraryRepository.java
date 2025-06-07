@@ -16,4 +16,5 @@ public interface LibraryRepository extends JpaRepository<Library, Long> {
     boolean existsByUserAndAudioBook(User user, AudioBook audioBook);
     boolean existsByUserIdAndAudioBookId(Long userId, Long audioBookId);
     void deleteByUserAndAudioBook(User user, AudioBook audioBook);
+    long countByUser(User user);
 }

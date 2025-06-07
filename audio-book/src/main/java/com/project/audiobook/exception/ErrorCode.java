@@ -41,6 +41,7 @@ public enum ErrorCode {
     EXPIRED_VERIFY_CODE(6003, "The code is expired"),
     UNAUTHORIZED(6004, "Token not found or error"),
     INTERNAL_SERVER_ERROR(6005, "Google token verification failed"),
+    WRONG_OLD_PASSWORD(6006, "Old password is not correct"),
     // User
     USER_EXISTED(7001, "User already existed"),
     USER_BLANK(7002, "User cannot be blank"),

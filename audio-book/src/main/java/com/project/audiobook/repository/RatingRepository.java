@@ -22,4 +22,5 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
 
     // Lấy tất cả rating của 1 audiobook để tính trung bình
     List<Rating> findAllByAudioBook(AudioBook audioBook);
+    long countByUser(User user);
 }

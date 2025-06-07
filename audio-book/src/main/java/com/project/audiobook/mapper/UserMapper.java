@@ -19,4 +19,5 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     User toUser(RegisterRequest request);
     UserResponse toUserResponse(User user);
+
 }

@@ -19,6 +19,8 @@ import VerifyCode from "./pages/Authentication/VerifyCode/VerifyCode";
 import ResetPassword from "./pages/Authentication/ResetPassword/ResetPassword";
 import Search from "./pages/Search/Search";
 import FilterCategory from "./pages/Filter/Category/FilterCategory";
+import Account from "./pages/Account/Account";
+
 
 function MainLayout() {
   return (
@@ -51,6 +53,7 @@ function App() {
           <Route path="/ranking" element={<Ranking />} />
           <Route path="/search" element={<Search />} />
           <Route path="/category/:categoryId" element={<FilterCategory />} />
+          <Route path="/account" element={<Account />} />
         </Route>
       </Routes>
     </Router>
