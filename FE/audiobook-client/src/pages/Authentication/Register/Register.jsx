@@ -49,7 +49,6 @@ const Register = () => {
     let photoURL = null;
     if (avatarFile) {
       const response = await uploadAvatar(avatarFile);
-      console.log(response.data);
       if (response.data.code === 1000) {
         photoURL = response.data.result.url;
         console.log( response.data.result.url);

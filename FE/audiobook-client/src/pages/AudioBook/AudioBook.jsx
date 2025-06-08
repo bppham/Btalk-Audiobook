@@ -16,10 +16,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getAudiobookById } from "../../services/AudiobookService";
 import { toggleLike } from "../../services/LikeService";
 import { ratingAudiobook } from "../../services/RatingService";
+import { useAuth } from "../../context/AuthContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   saveToLibrary,
   removeFromLibrary,
 } from "../../services/LibraryService";
+import LoadingOverlay from "../../components/LoadingOverlay/LoadingOverlay";
 
 const AudioBook = () => {
   const { id } = useParams();
@@ -33,6 +37,9 @@ const AudioBook = () => {
     categoryNames: [],
   });
 
+  const { user, loading: authLoading } = useAuth();
+  const [loading, setLoading] = useState(true);
+
   const [image, setImage] = useState(null);
   const [audioFiles, setAudioFiles] = useState([]);
 
@@ -40,22 +47,27 @@ const AudioBook = () => {
   const fetchData = async () => {
     try {
       const response = await getAudiobookById(id);
-      const result = response.data.result;
-      console.log("📥 API Response:", result);
-      setAudioBook(result);
+      console.log(response);
+      if (response.data.code === 1000) {
+        const result = response.data.result;
 
-      setLikeCount(result.likeCount || 0);
-      setLiked(result.likedByCurrentUser || false);
+        setAudioBook(result);
 
-      setRating(result.userRating || 0);
-      setRatingCount(result.ratingCount);
-      setRatinigAverage(result.averageRating);
+        setLikeCount(result.likeCount || 0);
+        setLiked(result.likedByCurrentUser || false);
 
-      setIsSaved(result.savedByCurrentUser || false);
+        setRating(result.userRating || 0);
+        setRatingCount(result.ratingCount);
+        setRatinigAverage(result.averageRating);
 
-      setListenCount(result.listenCount);
+        setIsSaved(result.savedByCurrentUser || false);
+
+        setListenCount(result.listenCount);
+      }
     } catch (error) {
       console.error("Error fetching audiobook: " + error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -96,14 +108,21 @@ const AudioBook = () => {
   const [likeCount, setLikeCount] = useState(0);
   const [liked, setLiked] = useState(false);
   const handleToggleLike = async () => {
-    try {
-      const res = await toggleLike(id);
-      const { likeCount, likedByCurrentUser } = res.data.result;
+    if (!user) {
+      toast.error("Vui lòng đăng nhập để thao tác");
+    } else {
+      try {
+        setLoading(true);
+        const res = await toggleLike(id);
+        const { likeCount, likedByCurrentUser } = res.data.result;
 
-      setLikeCount(likeCount);
-      setLiked(likedByCurrentUser);
-    } catch (error) {
-      console.error("Toggle like failed", error);
+        setLikeCount(likeCount);
+        setLiked(likedByCurrentUser);
+      } catch (error) {
+        console.error("Toggle like failed", error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -112,32 +131,46 @@ const AudioBook = () => {
   const [ratingCount, setRatingCount] = useState(0);
   const [ratingAvarage, setRatinigAverage] = useState(0);
   const handleRating = async (value) => {
-    setRating(value);
-    try {
-      const res = await ratingAudiobook(id, value);
-      const { averageRating, totalRatings } = res.data.result;
+    if (!user) {
+      toast.error("Vui lòng đăng nhập để thao tác");
+    } else {
+      setLoading(true);
+      setRating(value);
+      try {
+        const res = await ratingAudiobook(id, value);
+        const { averageRating, totalRatings } = res.data.result;
 
-      setRatingCount(totalRatings);
-      setRatinigAverage(averageRating);
-    } catch (error) {
-      console.error("Rating failed", error);
+        setRatingCount(totalRatings);
+        setRatinigAverage(averageRating);
+      } catch (error) {
+        console.error("Rating failed", error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   // Save to library
   const [isSaved, setIsSaved] = useState(false);
   const handleToggleSave = async () => {
-    try {
-      if (isSaved) {
-        await removeFromLibrary(id);
-        setIsSaved(false);
-      } else {
-        await saveToLibrary(id);
-        setIsSaved(true);
+    if (!user) {
+      toast.error("Vui lòng đăng nhập để thao tác");
+    } else {
+      try {
+        setLoading(true);
+        if (isSaved) {
+          await removeFromLibrary(id);
+          setIsSaved(false);
+        } else {
+          await saveToLibrary(id);
+          setIsSaved(true);
+        }
+      } catch (err) {
+        console.error("Toggle save failed", err);
+        toast.error("Thao tác thất bại!");
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Toggle save failed", err);
-      alert("Thao tác thất bại!");
     }
   };
 
@@ -146,6 +179,8 @@ const AudioBook = () => {
 
   return (
     <div className="audiobook">
+      <ToastContainer position="top-right" autoClose={3000} />
+      {loading && <LoadingOverlay />}
       <div className="quick-information">
         <div className="book-cover">
           <img src={imagePreview} alt="Preview" />
@@ -223,7 +258,7 @@ const AudioBook = () => {
         </div>
       </div>
       <div className="audiobook-section">
-        <AudiobookPlayer audioFiles={audioFiles} audioBookId={id}/>
+        <AudiobookPlayer audioFiles={audioFiles} audioBookId={id} />
       </div>
       <fieldset className="description-container">
         <legend>Mô tả</legend>

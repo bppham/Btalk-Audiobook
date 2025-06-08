@@ -5,10 +5,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import LoadingOverlay from "../../components/LoadingOverlay/LoadingOverlay";
 const Search = () => {
   const [params] = useSearchParams();
   const keyword = params.get('keyword');
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   // Show list audiobook
   const [audiobooks, setAudiobooks] = useState([]);
   
@@ -20,15 +22,18 @@ const Search = () => {
     } catch (error) {
       console.error("Error fetching audiobooks:", error);
       toast.error("Failed to load audiobooks!");
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
     fetchAudioBooks();
-  }, []);
+  }, [keyword]);
 
   return (
     <div className="search-container">
       <ToastContainer position="top-right" autoClose={3000} />
+      {loading && <LoadingOverlay />}
       <div className="new-audiobooks">
         <div className="title">
           <h1>Tìm kiếm: {keyword}</h1>

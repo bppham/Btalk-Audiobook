@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import "./Login.css";
 import ic_google from "../../../assets/auth/icon_google.svg";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../../config/firebase-config";
 import { login } from "../../../services/Auth";
 import { loginWithGoogle } from "../../../services/Auth";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
+import { getUserInfo } from "../../../services/UserService";
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { setUser } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,12 +29,15 @@ const Login = () => {
     try {
       const response = await login(request);
       if (response.code === 1000) {
-        alert("Đăng nhập thành công!");
+        localStorage.setItem("token", response.result.token);
+        const responseUserInfo = await getUserInfo();
+        setUser(responseUserInfo.data.result);
+        toast.success("Đăng nhập thành công!");
         navigate("/");
       }
     } catch (error) {
       console.error("Login failed:", error);
-      alert("Đăng nhập thất bại!");
+      toast.error("Đăng nhập thất bại!");
     }
   };
 
@@ -50,21 +57,21 @@ const Login = () => {
       console.log(response);
       if (response.code === 1000) {
         console.log("JWT từ backend:", response);
-        localStorage.setItem("token", response.result.token); // JWT token
-        localStorage.setItem("userEmail", response.result.email);
-        alert("Đăng nhập thành công!");
+        localStorage.setItem("token", response.result.token);
+        const responseUserInfo = await getUserInfo();
+        setUser(responseUserInfo.data.result);
+        toast.success("Đăng nhập thành công");
         navigate("/");
       }
-
-      // TODO: chuyển hướng nếu cần
     } catch (error) {
       console.error("Google login failed:", error);
-      alert("Đăng nhập bằng Google thất bại!");
+      toast.error("Đăng nhập bằng Google thất bại!");
     }
   };
 
   return (
     <div className="auth-container">
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="auth-box">
         <h2>Đăng nhập</h2>
         <form onSubmit={handleLogin} className="auth-form">

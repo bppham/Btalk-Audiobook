@@ -1,10 +1,8 @@
 import React, { use, useEffect, useState, useRef } from "react";
 import "./Account.css";
-import { filterCategory } from "../../services/SearchService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
-import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import LoadingOverlay from "../../components/LoadingOverlay/LoadingOverlay";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";

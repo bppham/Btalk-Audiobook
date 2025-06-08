@@ -121,3 +121,8 @@
     padding: 4px 8px;
   }
 }
+
+.history-message p{
+  font-size: 18px;
+  padding: 10px;
+}
