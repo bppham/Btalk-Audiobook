@@ -54,11 +54,13 @@ const AudioBookUpdate = () => {
           listCategories(),
         ]);
         const book = bookRes.data.result;
-        
+
         // Ensure audioFiles have both fileName and fileUrl
-        const processedAudioFiles = (book.audioFiles || []).map(file => ({
+        const processedAudioFiles = (book.audioFiles || []).map((file) => ({
           fileName: file.fileName,
-          fileUrl: file.fileUrl || `https://res.cloudinary.com/dkcpxrkr3/video/upload/v1/audiobook/audio/${file.fileName}`,
+          fileUrl:
+            file.fileUrl ||
+            `https://res.cloudinary.com/dkcpxrkr3/video/upload/v1/audiobook/audio/${file.fileName}`,
         }));
 
         setAudioBook({
@@ -68,7 +70,9 @@ const AudioBookUpdate = () => {
           voiceId: book.voiceId || "",
           description: book.description || "",
           note: book.note || "",
-          categoryIds: book.categoryIds || (book.categories ? book.categories.map((c) => c.id) : []),
+          categoryIds:
+            book.categoryIds ||
+            (book.categories ? book.categories.map((c) => c.id) : []),
           image: book.image || "",
           audioFiles: processedAudioFiles,
         });
@@ -184,7 +188,9 @@ const AudioBookUpdate = () => {
         } else {
           oldFiles.push({
             fileName: file.fileName,
-            fileUrl: file.fileUrl || `https://res.cloudinary.com/dkcpxrkr3/video/upload/v1/audiobook/audio/${file.fileName}`,
+            fileUrl:
+              file.fileUrl ||
+              `https://res.cloudinary.com/dkcpxrkr3/video/upload/v1/audiobook/audio/${file.fileName}`,
           });
         }
       });
@@ -201,7 +207,9 @@ const AudioBookUpdate = () => {
       // Prepare final audioFiles
       const finalAudioFiles = [...oldFiles, ...uploadedFiles].map((f) => ({
         fileName: f.fileName,
-        fileUrl: f.url || `https://res.cloudinary.com/dkcpxrkr3/video/upload/v1/audiobook/audio/${f.fileName}`,
+        fileUrl:
+          f.url ||
+          `https://res.cloudinary.com/dkcpxrkr3/video/upload/v1/audiobook/audio/${f.fileName}`,
       }));
 
       // Prepare payload
@@ -263,13 +271,13 @@ const AudioBookUpdate = () => {
               value={audioBook.authorId || ""}
               onChange={handleAuthorChange}
             >
-              <option value="">Chọn tác giả</option>
+              <option value="">Choose author</option>
               {allAuthors.map((author) => (
                 <option key={author.id} value={author.id}>
                   {author.name}
                 </option>
               ))}
-              <option value="new">Thêm tác giả mới</option>
+              <option value="new">Add new author</option>
             </select>
           </div>
           <div className="item">
@@ -279,13 +287,13 @@ const AudioBookUpdate = () => {
               value={audioBook.voiceId || ""}
               onChange={handleVoiceChange}
             >
-              <option value="">Chọn giọng đọc</option>
+              <option value="">Choose voice</option>
               {allVoices.map((voice) => (
                 <option key={voice.id} value={voice.id}>
                   {voice.name}
                 </option>
               ))}
-              <option value="new">Thêm giọng đọc mới</option>
+              <option value="new">Add new voice</option>
             </select>
           </div>
         </div>
@@ -338,7 +346,7 @@ const AudioBookUpdate = () => {
                 type="button"
                 onClick={() => document.getElementById("fileInput").click()}
               >
-                Chọn ảnh
+                Choose image
               </button>
               {imagePreview && (
                 <div className="image-preview">
@@ -363,9 +371,10 @@ const AudioBookUpdate = () => {
               />
               <button
                 type="button"
+                className="btn-choose-files"
                 onClick={() => document.getElementById("audioInput").click()}
               >
-                Chọn file audio
+                Choose audio files
               </button>
               <div className="audio-files-list">
                 {audioPreviews.map((file, index) => (
@@ -393,7 +402,11 @@ const AudioBookUpdate = () => {
         </div>
 
         <div className="row">
-          <button type="button" onClick={handleUpdate} className="update-button">
+          <button
+            type="button"
+            onClick={handleUpdate}
+            className="update-button"
+          >
             Update Audiobook
           </button>
         </div>

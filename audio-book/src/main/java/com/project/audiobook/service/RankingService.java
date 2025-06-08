@@ -1,12 +1,11 @@
 package com.project.audiobook.service;
 
 import com.project.audiobook.dto.response.Audiobook.AudioBookResponse;
-import com.project.audiobook.entity.AudioBook;
 import com.project.audiobook.mapper.AudioBookMapper;
 import com.project.audiobook.repository.AudioBookRepository;
 import com.project.audiobook.repository.AudioBookStatRepository;
 import com.project.audiobook.utils.AudiobookUtil;
-import com.project.audiobook.utils.StatType;
+import com.project.audiobook.enums.StatType;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

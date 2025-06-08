@@ -1,11 +1,10 @@
 package com.project.audiobook.entity;
 
-import com.project.audiobook.utils.StatType;
+import com.project.audiobook.enums.StatType;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 
 @Entity

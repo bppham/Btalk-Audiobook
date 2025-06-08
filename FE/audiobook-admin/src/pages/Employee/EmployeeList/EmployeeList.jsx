@@ -35,12 +35,6 @@ const EmployeeList = () => {
             setImagePreview(imageUrl);
         }
     };
-
-    // Return image url
-    const handleImageUrl = (url) => {
-        return "http://localhost:8080/files/" + url;
-    }
-
     // Delete a employee
     const handleDelete = async (id) => {
         Swal.fire({
@@ -135,7 +129,7 @@ const EmployeeList = () => {
                         <tr key={employee.id}>
                             <td>{employee.id}</td>
                             <td>
-                                <img src={handleImageUrl(employee.avatar)} alt="" />
+                                <img src={employee.avatar} alt="" />
                             </td>
                             <td>{employee.name}</td>
                             <td>{employee.email}</td>

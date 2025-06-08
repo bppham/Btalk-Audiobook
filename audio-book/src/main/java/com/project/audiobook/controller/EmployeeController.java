@@ -23,32 +23,17 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ApiResponse<EmployeeResponse> addEmployee(@Valid @RequestPart("employee") String employeeJson,
-                                              @RequestPart(value = "avatar", required = false) MultipartFile avatar) throws JsonProcessingException{
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-        EmployeeCreationRequest request = objectMapper.readValue(employeeJson, EmployeeCreationRequest.class);
-
-        try {
-            return ApiResponse.<EmployeeResponse>builder()
-                    .result(employeeService.createEmployee(request, avatar))
-                    .build();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @PostMapping
+    ApiResponse<EmployeeResponse> addEmployee(@RequestBody EmployeeCreationRequest request) throws IOException {
+        return ApiResponse.<EmployeeResponse>builder()
+                .result(employeeService.createEmployee(request))
+                .build();
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ApiResponse<EmployeeResponse> updateEmployee(@Valid
-                                                   @PathVariable Long id,
-                                                   @RequestPart("employee") String employeeJson,
-                                                   @RequestPart(value = "avatar", required = false) MultipartFile image) throws JsonProcessingException{
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-        EmployeeUpdationRequest request = objectMapper.readValue(employeeJson, EmployeeUpdationRequest.class);
+    @PutMapping(value = "/{id}")
+    ApiResponse<EmployeeResponse> updateEmployee(@PathVariable Long id, @RequestBody EmployeeUpdationRequest request){
         return ApiResponse.<EmployeeResponse>builder()
-                .result(employeeService.updateEmployee(id, request, image))
+                .result(employeeService.updateEmployee(id, request))
                 .build();
     }
 
@@ -66,7 +51,7 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ApiResponse<List<EmployeeResponse>> getAllEmployee() {
+     ApiResponse<List<EmployeeResponse>> getAllEmployee() {
         return ApiResponse.<List<EmployeeResponse>>builder()
                 .result(employeeService.getAllEmployees())
                 .build();

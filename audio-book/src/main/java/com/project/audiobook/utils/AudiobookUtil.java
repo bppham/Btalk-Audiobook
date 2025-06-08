@@ -5,6 +5,7 @@ import com.project.audiobook.dto.response.Audiobook.UserAudioBookResponse;
 import com.project.audiobook.entity.AudioBook;
 import com.project.audiobook.entity.AudioBookStat;
 import com.project.audiobook.entity.Rating;
+import com.project.audiobook.enums.StatType;
 import com.project.audiobook.repository.AudioBookStatRepository;
 import com.project.audiobook.repository.LibraryRepository;
 import com.project.audiobook.repository.LikeRepository;

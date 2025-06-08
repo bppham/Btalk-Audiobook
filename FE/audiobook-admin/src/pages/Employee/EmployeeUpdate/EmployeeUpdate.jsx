@@ -57,15 +57,10 @@ const EmployeeUpdate = () => {
     }
   };
 
-  // Return image url
-  const handleImageUrl = (url) => {
-    return "http://localhost:8080/files/" + url;
-  };
-
   // Show image at the beginning
   useEffect(() => {
     if (employee && employee.avatar) {
-      const urlImage = handleImageUrl(employee.avatar);
+      const urlImage = employee.avatar;
       setImagePreview(urlImage);
     }
   }, [employee]);

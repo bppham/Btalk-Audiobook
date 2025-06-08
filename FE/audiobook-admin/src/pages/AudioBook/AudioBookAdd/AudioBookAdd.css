@@ -384,7 +384,7 @@
 /* Update Button */
 .update-button {
   padding: 12px 24px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 4px;
@@ -412,4 +412,18 @@
   .audio-file-item audio {
     max-width: 100%;
   }
+}
+
+button.btn-choose-files {
+  padding: 8px 16px;
+  background-color: #fd7e14;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: fit-content;
+}
+
+button.btn-choose-files:hover {
+  background-color: #e9802a;
 }

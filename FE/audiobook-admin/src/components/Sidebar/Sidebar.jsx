@@ -4,7 +4,6 @@ import {
   faHouse,
   faFileAudio,
   faUsers,
-  faPeopleRoof,
   faList,
   faPen,
   faMicrophone,
@@ -73,20 +72,6 @@ const Sidebar = () => {
           </div>
         )}
 
-        {hasRole(["ROLE_ADMIN"]) && (
-          <div className="sidebar-menu">
-            <div className="sidebar-title">Clients</div>
-            <ul className="sidebar-list">
-              <Link to="/users" className="link">
-                <li className="sidebar-list-item">
-                  <FontAwesomeIcon className="sidebar-icon" icon={faUsers} />{" "}
-                  User
-                </li>
-              </Link>
-            </ul>
-          </div>
-        )}
-
         {hasRole(["ROLE_ADMIN", "ROLE_EMPLOYEE"]) && (
           <div className="sidebar-menu">
             <div className="sidebar-title">Staff</div>
@@ -95,7 +80,7 @@ const Sidebar = () => {
                 <li className="sidebar-list-item">
                   <FontAwesomeIcon
                     className="sidebar-icon"
-                    icon={faPeopleRoof}
+                    icon={faUsers}
                   />{" "}
                   Employees
                 </li>

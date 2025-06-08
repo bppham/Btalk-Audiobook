@@ -21,7 +21,7 @@ import com.project.audiobook.exception.AppException;
 import com.project.audiobook.exception.ErrorCode;
 import com.project.audiobook.mapper.UserMapper;
 import com.project.audiobook.repository.UserRepository;
-import com.project.audiobook.utils.AuthProvider;
+import com.project.audiobook.enums.AuthProvider;
 import com.project.audiobook.utils.EmailUtil;
 import com.project.audiobook.utils.JwtUtil;
 import com.project.audiobook.utils.VerifyCodeUtil;
@@ -50,7 +50,6 @@ public class UserAuthService {
     final JwtUtil jwtUtil;
     final VerifyCodeUtil verifyCodeUtil;
     final EmailUtil emailUtil;
-    final UploadService uploadService;
     final UserMapper userMapper;
 
     // Register

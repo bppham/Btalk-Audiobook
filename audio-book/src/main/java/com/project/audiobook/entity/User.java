@@ -1,6 +1,6 @@
 package com.project.audiobook.entity;
 
-import com.project.audiobook.utils.AuthProvider;
+import com.project.audiobook.enums.AuthProvider;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -8,7 +8,7 @@ import com.project.audiobook.exception.ErrorCode;
 import com.project.audiobook.mapper.HistoryMapper;
 import com.project.audiobook.repository.*;
 import com.project.audiobook.utils.AudiobookUtil;
-import com.project.audiobook.utils.StatType;
+import com.project.audiobook.enums.StatType;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

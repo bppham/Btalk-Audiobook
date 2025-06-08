@@ -13,48 +13,26 @@ export const listEmployee = () =>
   });
 // delete
 export const deleteEmployee = (id) =>
-  axios.delete(REST_API_BASE_URL_EMPLOYEE + "/" + id);
+  axios.delete(REST_API_BASE_URL_EMPLOYEE + "/" + id, {
+    headers: getAuthHeaders(),
+  });
 // get all roles
-export const listRole = () => axios.get(REST_API_BASE_URL_ROLES);
+export const listRole = () =>
+  axios.get(REST_API_BASE_URL_ROLES, {
+    headers: getAuthHeaders(),
+  });
 // add employee
-export const addEmployee = async (formData) => {
-  try {
-    const response = await axios.post(REST_API_BASE_URL_EMPLOYEE, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+export const addEmployee = (request) =>
+  axios.post(REST_API_BASE_URL_EMPLOYEE, request, {
+    headers: getAuthHeaders(),
+  });
 // get by id
 export const getEmployeeById = (id) =>
-  axios.get(REST_API_BASE_URL_EMPLOYEE + "/" + id);
+  axios.get(REST_API_BASE_URL_EMPLOYEE + "/" + id, {
+    headers: getAuthHeaders(),
+  });
 // update an employee
-export const updateEmployee = async (id, employee, imageFile) => {
-  const formData = new FormData();
-
-  // Chuyển đổi audioBook thành JSON string
-  const employeeJSON = JSON.stringify({
-    name: employee.name,
-    email: employee.email,
-    phoneNumber: employee.phoneNumber,
-    roleIds: employee.roleIds, // Gửi danh sách ID
+export const updateEmployee = (id, request) =>
+  axios.put(`${REST_API_BASE_URL_EMPLOYEE}/${id}`, request, {
+    headers: getAuthHeaders(),
   });
-  console.log("employeeJSON : " + employeeJSON);
-
-  formData.append("employee", employeeJSON);
-
-  // Nếu có ảnh mới, thêm vào formData
-  if (imageFile) {
-    formData.append("avatar", imageFile);
-  }
-
-  return axios.put(`${REST_API_BASE_URL_EMPLOYEE}/${id}`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-};

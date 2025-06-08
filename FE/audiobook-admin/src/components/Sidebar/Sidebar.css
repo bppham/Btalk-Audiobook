@@ -18,6 +18,7 @@
 .sidebar-title{
     font-size: 15px;
     color: rgb(179, 173, 173);
+    margin: 10px;
 }
 
 .sidebar-list{
@@ -31,7 +32,7 @@
     display: flex;
     align-items: center;
     border-radius: 20px;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
 }
 
 .sidebar-list-item.active, .sidebar-list-item:hover{

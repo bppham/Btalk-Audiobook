@@ -207,13 +207,13 @@ const AudioBookAdd = () => {
               value={audioBook.authorId || ""}
               onChange={handleAuthorChange}
             >
-              <option value="">Chọn tác giả</option>
+              <option value="">Choose author</option>
               {allAuthors.map((author) => (
                 <option key={author.id} value={author.id}>
                   {author.name}
                 </option>
               ))}
-              <option value="new">Thêm tác giả mới</option>
+              <option value="new">Add new author</option>
             </select>
           </div>
           <div className="item">
@@ -223,13 +223,13 @@ const AudioBookAdd = () => {
               value={audioBook.voiceId || ""}
               onChange={handleVoiceChange}
             >
-              <option value="">Chọn giọng đọc</option>
+              <option value="">Choose voice</option>
               {allVoices.map((voice) => (
                 <option key={voice.id} value={voice.id}>
                   {voice.name}
                 </option>
               ))}
-              <option value="new">Thêm giọng đọc mới</option>
+              <option value="new">Add new voice</option>
             </select>
           </div>
         </div>
@@ -282,7 +282,7 @@ const AudioBookAdd = () => {
                 type="button"
                 onClick={() => document.getElementById("fileInput").click()}
               >
-                Chọn ảnh
+                Choose image
               </button>
               {imagePreview && (
                 <div className="image-preview">
@@ -306,10 +306,10 @@ const AudioBookAdd = () => {
                 multiple
               />
               <button
-                type="button"
+                type="button" className="btn-choose-files"
                 onClick={() => document.getElementById("audioInput").click()}
               >
-                Chọn file audio
+                Choose audio files
               </button>
               <div className="audio-files-list">
                 {audioPreviews.map((file, index) => (

@@ -13,6 +13,7 @@ import com.project.audiobook.repository.RoleRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,16 +25,17 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = false)
 public class EmployeeService {
-    EmployeeRepository employeeRepository;
-    EmployeeMapper employeeMapper;
-    RoleRepository roleRepository;
-    PasswordEncoder passwordEncoder;
+    @Value("${app.default-avatar-url}")
+    private String defaultAvatarUrl;
+    final EmployeeRepository employeeRepository;
+    final EmployeeMapper employeeMapper;
+    final RoleRepository roleRepository;
+    final PasswordEncoder passwordEncoder;
 
-    FileStorageService fileStorageService;
 
-    public EmployeeResponse createEmployee(EmployeeCreationRequest request, MultipartFile avatarFile) throws IOException {
+    public EmployeeResponse createEmployee(EmployeeCreationRequest request) throws IOException {
         if (employeeRepository.existsByEmail(request.getEmail())) {
             throw new AppException(ErrorCode.EMPLOYEE_EMAIL_EXISTED);
         }
@@ -41,12 +43,9 @@ public class EmployeeService {
         request.setPassword(passwordEncoder.encode(request.getPhoneNumber()));
         List<Role> roles = (request.getRoleIds() != null) ? roleRepository.findAllById(request.getRoleIds()) : new ArrayList<>();
 
-        // **Lưu avatar nếu có**
-        if (avatarFile != null) {
-            String avatarFileName = fileStorageService.storeAvatar(avatarFile);
-            request.setAvatar(avatarFileName);
+        if (request.getAvatar() == null || request.getAvatar().isEmpty()) {
+            request.setAvatar(defaultAvatarUrl);
         }
-
         // DTO -> Entity và lưu và database
         Employee employee = employeeMapper.toEmployee(request, roles);
         employee = employeeRepository.save(employee);
@@ -68,8 +67,7 @@ public class EmployeeService {
         return employeeRepository.findAll().stream().map(employeeMapper::toEmployeeResponse).collect(Collectors.toList());
     }
 
-    public EmployeeResponse updateEmployee(Long id, EmployeeUpdationRequest request,
-                                           MultipartFile avatarFile) {
+    public EmployeeResponse updateEmployee(Long id, EmployeeUpdationRequest request) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
 
@@ -82,14 +80,8 @@ public class EmployeeService {
         employee.setPhoneNumber(request.getPhoneNumber());
 
         // Nếu có file avatar mới, lưu nó
-        if (avatarFile != null) {
-            String avatarFileName = null;
-            try {
-                avatarFileName = fileStorageService.storeAvatar(avatarFile);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            employee.setAvatar(avatarFileName);
+        if (request.getAvatar() != null && !request.getAvatar().isEmpty()) {
+            employee.setAvatar(request.getAvatar());
         }
 
         employee = employeeRepository.save(employee);

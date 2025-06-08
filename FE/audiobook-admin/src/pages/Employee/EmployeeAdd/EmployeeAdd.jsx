@@ -1,21 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./EmployeeAdd.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { addEmployee, listRole } from "../../../services/EmployeeService";
+import { uploadAvatar } from "../../../services/Upload";
+import LoadingOverlay from "../../../../../audiobook-client/src/components/LoadingOverlay/LoadingOverlay";
 const EmployeeAdd = () => {
   const navigate = useNavigate();
-
+  const defaultImage =
+    "https://res.cloudinary.com/dkcpxrkr3/image/upload/v1748250537/default-avatar-icon-of-social-media-user-vector_gzsm2f.jpg";
   const [employee, setEmployee] = useState({
     name: "",
     email: "",
     phoneNumber: "",
     roleIds: [],
+    avatar: "",
   });
 
-  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const [avatarFile, setAvatarFile] = useState(null);
+  const fileInputRef = useRef();
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click(); // kích hoạt input ẩn
+  };
 
   // Handle input
   const handleInputChange = (e) => {
@@ -25,16 +36,18 @@ const EmployeeAdd = () => {
 
   // Preview Image
   const [imagePreview, setImagePreview] = useState(null);
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImagePreview(imageUrl);
-      setImage(file);
+      setAvatarFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    } else {
+      setAvatarFile(null);
+      setImagePreview(defaultImage);
     }
   };
 
-  // Handel categories
+  // Handel roles
   const [allRoles, setAllRoles] = useState([]);
   const fetchRoles = async () => {
     try {
@@ -64,36 +77,37 @@ const EmployeeAdd = () => {
   // Handle Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
+    let photoURL = null;
+    if (avatarFile) {
+      const response = await uploadAvatar(avatarFile);
+      if (response.data.code === 1000) {
+        photoURL = response.data.result.url;
+      }
+    }
     // Giữ roles là danh sách string
-    const formattedEmployee = {
+    const requestEmployee = {
       ...employee,
-      roleIds: employee.roleIds // Gửi danh sách string, không phải object
+      roleIds: employee.roleIds,
+      avatar: photoURL,
     };
 
-    const formData = new FormData();
-    formData.append(
-      "employee",
-      new Blob([JSON.stringify(formattedEmployee)], {
-        type: "application/json",
-      })
-    );
-
-    if (image) formData.append("avatar", image);
-
-    try {
-      await addEmployee(formData);
-      toast.success("Employee added successfully!");
-      navigate("/employees");
-    } catch (error) {
-      toast.error("Failed to add employee!");
-      console.error(error);
+    const response = await addEmployee(requestEmployee);
+    if (response.data.code === 1000) {
+      toast.success("Add employee successfully");
+      setTimeout(() => {
+        navigate("/employees");
+      }, 3000);
+    } else {
+      toast.error("Failed to add employee");
     }
+    setLoading(false);
   };
 
   return (
     <div className="employee-add">
       <ToastContainer position="top-right" autoClose={3000} />
+      {loading && <LoadingOverlay />}
       <h1>Add an employee</h1>
       <div className="form-add-employee">
         <div className="row">
@@ -130,10 +144,14 @@ const EmployeeAdd = () => {
         <div className="row">
           <div className="item">
             <label>Avatar</label>
+            <button className="btn-choose-avatar" type="button" onClick={handleButtonClick}>
+              Choose image
+            </button>
             <input
               type="file"
               name="image"
-              id=""
+              ref={fileInputRef}
+              style={{ display: "none" }}
               onChange={handleImageChange}
             />
           </div>
