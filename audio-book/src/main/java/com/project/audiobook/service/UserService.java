@@ -1,7 +1,7 @@
 package com.project.audiobook.service;
 
-import com.project.audiobook.dto.request.User.UserUpdationInfoRequest;
-import com.project.audiobook.dto.request.User.UserUpdationPasswordRequest;
+import com.project.audiobook.dto.request.User.UserUpdateInfoRequest;
+import com.project.audiobook.dto.request.User.UserUpdatePasswordRequest;
 import com.project.audiobook.dto.response.User.UserInfoResponse;
 import com.project.audiobook.dto.response.User.UserResponse;
 import com.project.audiobook.entity.User;
@@ -58,7 +58,7 @@ public class UserService {
     }
 
     // Update info (name)
-    public UserResponse updateInfo(Long userId, UserUpdationInfoRequest request) throws IOException {
+    public UserResponse updateInfo(Long userId, UserUpdateInfoRequest request) throws IOException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         user.setName(request.getName());
@@ -69,8 +69,8 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
-    // Update info (name)
-    public UserResponse changePassword(Long userId, UserUpdationPasswordRequest request) throws IOException {
+    // Update info (password)
+    public UserResponse changePassword(Long userId, UserUpdatePasswordRequest request) throws IOException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 

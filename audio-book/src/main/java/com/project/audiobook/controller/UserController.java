@@ -1,7 +1,7 @@
 package com.project.audiobook.controller;
 
-import com.project.audiobook.dto.request.User.UserUpdationInfoRequest;
-import com.project.audiobook.dto.request.User.UserUpdationPasswordRequest;
+import com.project.audiobook.dto.request.User.UserUpdateInfoRequest;
+import com.project.audiobook.dto.request.User.UserUpdatePasswordRequest;
 import com.project.audiobook.dto.response.ApiResponse;
 import com.project.audiobook.dto.response.User.UserInfoResponse;
 import com.project.audiobook.dto.response.User.UserResponse;
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    ApiResponse<UserResponse> updateInfo(@RequestBody UserUpdationInfoRequest request, HttpServletRequest httpRequest) throws IOException {
+    ApiResponse<UserResponse> updateInfo(@RequestBody UserUpdateInfoRequest request, HttpServletRequest httpRequest) throws IOException {
         Long userId = jwtRequestUtil.getUserIdFromRequest(httpRequest);
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateInfo(userId, request))
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @PutMapping("/change-password")
-    ApiResponse<UserResponse> changePassword(@RequestBody UserUpdationPasswordRequest request, HttpServletRequest httpRequest) throws IOException {
+    ApiResponse<UserResponse> changePassword(@RequestBody UserUpdatePasswordRequest request, HttpServletRequest httpRequest) throws IOException {
         Long userId = jwtRequestUtil.getUserIdFromRequest(httpRequest);
         return ApiResponse.<UserResponse>builder()
                 .result(userService.changePassword(userId, request))

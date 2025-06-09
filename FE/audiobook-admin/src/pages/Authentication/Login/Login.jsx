@@ -3,7 +3,8 @@ import "./Login.css";
 import sub_img_1 from "../../../assets/login-sub-img1.png";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../../services/AuthService";
-import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../../../context/AuthContext";
+import { getEmployeeInfo } from "../../../services/AccountService";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const { setUser } = useAuth();
 
   const handleLogin = async () => {
     try {
@@ -19,17 +21,12 @@ const Login = () => {
       if (response.code === 1000) {
         const token = response.result.token;
         localStorage.setItem("token", token);
-
-        // ✅ Giải mã token để lấy roles
-        const decoded = jwtDecode(token);
-        const roles = decoded.roles;
-
-        // ✅ Lưu email, name, roles (tùy frontend cần gì)
-        localStorage.setItem("email", decoded.sub); // Hoặc response.email nếu backend trả
-        localStorage.setItem("name", response.name); // Nếu backend trả riêng
-        localStorage.setItem("roles", JSON.stringify(roles)); // Đã đúng
-
-        navigate("/");
+        const responseUserInfo = await getEmployeeInfo();
+        if (responseUserInfo.data.code === 1000) {
+          console.log("responseUserInfo", responseUserInfo);
+          setUser(responseUserInfo.data.result);
+          navigate("/");
+        }
       }
     } catch (err) {
       console.log(err);

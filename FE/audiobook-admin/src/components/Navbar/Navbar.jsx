@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Navbar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-regular-svg-icons";
-import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { faCircleUser, faCircleLeft } from "@fortawesome/free-solid-svg-icons";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Navbar = () => {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const navigate = useNavigate();
+  const { user, logout, loading } = useAuth();
+
+  if (loading) return null;
+
+  // useEffect(() => {
+  //   if (!loading && !user) {
+  //     navigate("/auth/login");
+  //   }
+  // }, [loading, user, navigate]);
   return (
     <div className="navbar">
       <div className="navbar-container">
@@ -15,12 +25,30 @@ const Navbar = () => {
             <span className="logo">BTalk</span>
           </Link>
         </div>
-        <div className="navbar-right">
-          <img
-            src="https://i.scdn.co/image/ab6761610000e5eb56d2d8d16ddedbf61b1c74f0"
-            alt=""
-            className="avatar"
-          />
+        <div
+          className="navbar-right"
+          onClick={() => setShowDropdown(!showDropdown)}
+        >
+          <img src={user.avatar} alt="" className="avatar" />
+          {showDropdown && (
+            <div className="dropdown-menu">
+              <Link
+                to="/employee/account"
+                onClick={() => setShowDropdown(false)}
+              >
+                <FontAwesomeIcon icon={faCircleUser} /> Account
+              </Link>
+              <div
+                onClick={() => {
+                  logout();
+                  setShowDropdown(false);
+                  navigate("/");
+                }}
+              >
+                <FontAwesomeIcon icon={faCircleLeft} /> Logout
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

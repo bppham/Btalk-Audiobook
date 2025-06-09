@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserUpdationInfoRequest {
+public class UserUpdateInfoRequest {
     @NotBlank(message = "NAME_BLANK")
     private String name;
     private String photoURL;

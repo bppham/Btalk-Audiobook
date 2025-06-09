@@ -1,7 +1,7 @@
 package com.project.audiobook.service;
 
 import com.project.audiobook.dto.request.Employee.EmployeeCreationRequest;
-import com.project.audiobook.dto.request.Employee.EmployeeUpdationRequest;
+import com.project.audiobook.dto.request.Employee.EmployeeUpdateRequest;
 import com.project.audiobook.dto.response.Employee.EmployeeResponse;
 import com.project.audiobook.entity.Employee;
 import com.project.audiobook.entity.Role;
@@ -16,7 +16,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,7 +66,7 @@ public class EmployeeService {
         return employeeRepository.findAll().stream().map(employeeMapper::toEmployeeResponse).collect(Collectors.toList());
     }
 
-    public EmployeeResponse updateEmployee(Long id, EmployeeUpdationRequest request) {
+    public EmployeeResponse updateEmployee(Long id, EmployeeUpdateRequest request) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
 

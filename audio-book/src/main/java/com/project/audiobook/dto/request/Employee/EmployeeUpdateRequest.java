@@ -9,7 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EmployeeUpdationRequest {
+public class EmployeeUpdateRequest {
     private String name;
     private String phoneNumber;
     private String email;

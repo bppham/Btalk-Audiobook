@@ -20,6 +20,8 @@ import ResetPassword from "./pages/Authentication/ResetPassword/ResetPassword";
 import Home from "./pages/Home/Home";
 import RequireAuth from "./RequireAuth";
 import RequireRole from "./RequireRole";
+import NotFound from "./pages/Exception/NotFound/NotFound";
+import Account from "./pages/Account/Account";
 
 function App() {
   return (
@@ -83,7 +85,7 @@ function MainLayout() {
             }
           />
           <Route
-            path="/audiobooks/new-audiobook" 
+            path="/audiobooks/new-audiobook"
             element={
               <RequireRole allowedRoles={["ROLE_ADMIN", "ROLE_AUDIOBOOK"]}>
                 <AudioBookAdd />
@@ -108,7 +110,7 @@ function MainLayout() {
           />
 
           <Route
-            path="/employees" 
+            path="/employees"
             element={
               <RequireRole allowedRoles={["ROLE_ADMIN", "ROLE_EMPLOYEE"]}>
                 <EmployeeList />
@@ -124,7 +126,7 @@ function MainLayout() {
             }
           />
           <Route
-            path="/employees/update/:id" 
+            path="/employees/update/:id"
             element={
               <RequireRole allowedRoles={["ROLE_ADMIN", "ROLE_EMPLOYEE"]}>
                 <EmployeeUpdate />
@@ -132,13 +134,23 @@ function MainLayout() {
             }
           />
           <Route
-            path="/employee/detail/:id" 
+            path="/employee/detail/:id"
             element={
               <RequireRole allowedRoles={["ROLE_ADMIN", "ROLE_EMPLOYEE"]}>
                 <EmployeeDetail />
               </RequireRole>
             }
           />
+
+          <Route
+            path="/employee/account"
+            element={
+              <RequireRole allowedRoles={["ROLE_ADMIN", "ROLE_EMPLOYEE", "ROLE_AUDIOBOOK"]}>
+                <Account />
+              </RequireRole>
+            }
+          />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </>

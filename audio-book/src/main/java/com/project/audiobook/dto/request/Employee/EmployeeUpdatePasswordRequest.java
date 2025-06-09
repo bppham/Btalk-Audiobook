@@ -1,4 +1,4 @@
-package com.project.audiobook.dto.request.User;
+package com.project.audiobook.dto.request.Employee;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserUpdationPasswordRequest {
+public class EmployeeUpdatePasswordRequest {
     private String oldPassword;
     private String newPassword;
 }
