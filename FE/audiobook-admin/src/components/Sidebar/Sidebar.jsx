@@ -9,9 +9,10 @@ import {
   faMicrophone,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { getRolesFromToken } from "../../utils/jwtUtils";
 
 const Sidebar = () => {
-  const roles = JSON.parse(localStorage.getItem("roles"));
+  const roles = getRolesFromToken();
 
   const hasRole = (allowedRoles) => {
     return roles.some((role) => allowedRoles.includes(role));
