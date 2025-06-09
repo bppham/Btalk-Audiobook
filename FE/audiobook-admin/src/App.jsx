@@ -17,6 +17,7 @@ import Login from './pages/Authentication/Login/Login';
 import ForgetPassword from './pages/Authentication/ForgetPassword/ForgetPassword';
 import VerifyCode from './pages/Authentication/VerifyCode/VerifyCode'
 import ResetPassword from './pages/Authentication/ResetPassword/ResetPassword'
+import Home from './pages/Home/Home';
 
 function App() {
     return (
@@ -39,6 +40,7 @@ function MainLayout() {
         <div className="container">
             <Sidebar/>
             <Routes>
+              <Route path = "/" element={<Home/>}/>
               <Route path = "/categories" element={<Category/>}/>
               <Route path = "/authors" element={<Author/>}/>
               <Route path = "/voices" element={<Voice/>}/>

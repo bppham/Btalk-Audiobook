@@ -205,5 +205,8 @@ public class AudioBookService {
         return audioBookRepository.findByCategoryId(categoryId, pageable)
                 .map(audioBookMapper::toAudioBookResponse);
     }
+    public long getTotalAudiobooks () {
+        return audioBookRepository.count();
+    }
 
 }

@@ -17,8 +17,12 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.YearMonth;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,7 @@ public class ListenService {
     final ListenHistoryRepository listenHistoryRepository;
     final UserRepository userRepository;
     final HistoryMapper historyMapper;
+    final AudioBookStatRepository audioBookStatRepository;
     private final AudiobookUtil listenUtil;
 
     @Transactional
@@ -91,6 +96,35 @@ public class ListenService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         List<ListenHistory> historyList = listenHistoryRepository.findByUserOrderByListenedAtDesc(user);
         return historyMapper.toHistoryResponseList(historyList);
+    }
+
+    public long getTotalListenCountThisYear() {
+        int currentYear = Year.now().getValue();
+        List<AudioBookStat> stats = audioBookStatRepository.findAllByTypeAndYearKey(StatType.YEARLY, currentYear);
+        return stats.stream()
+                .mapToLong(AudioBookStat::getListenCount)
+                .sum();
+    }
+
+    public Map<Integer, Long> getMonthlyListenStatsThisYear() {
+        int currentYear = Year.now().getValue();
+        YearMonth start = YearMonth.of(currentYear, 1);
+        YearMonth end = YearMonth.of(currentYear, 12);
+
+        List<AudioBookStat> stats = audioBookStatRepository
+                .findAllByTypeAndMonthKeyBetween(StatType.MONTHLY, start, end);
+
+        Map<Integer, Long> monthlyStats = new LinkedHashMap<>();
+        for (int month = 1; month <= 12; month++) {
+            monthlyStats.put(month, 0L);
+        }
+
+        stats.forEach(stat -> {
+            int month = stat.getMonthKey().getMonthValue();
+            monthlyStats.merge(month, stat.getListenCount(), Long::sum);
+        });
+
+        return monthlyStats;
     }
 
 

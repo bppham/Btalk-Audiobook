@@ -44,6 +44,7 @@ public class SecurityConfig {
                         .requestMatchers("/voices/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_AUDIOBOOK")
                         .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
                         .requestMatchers("/categories/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_AUDIOBOOK")
+                        .requestMatchers("/statistics/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_AUDIOBOOK", "ROLE_EMPLOYEE")
                         .requestMatchers("/files/**").permitAll()
                         .requestMatchers("/likes/**").authenticated()
                         .requestMatchers("/ratings/**").authenticated()

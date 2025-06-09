@@ -88,4 +88,8 @@ public class UserService {
         userRepository.save(user);
         return userMapper.toUserResponse(user);
     }
+
+    public long getTotalUsers () {
+        return userRepository.count();
+    }
 }

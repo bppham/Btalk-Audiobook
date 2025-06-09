@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -27,4 +28,8 @@ public interface AudioBookStatRepository extends JpaRepository<AudioBookStat, Lo
     void deleteByTypeAndDateKeyBefore(StatType type, LocalDate date);
     void deleteByTypeAndMonthKeyBefore(StatType type, YearMonth month);
     void deleteByTypeAndYearKeyLessThan(StatType type, int year);
+
+    List<AudioBookStat> findAllByTypeAndYearKey(StatType type, Integer yearKey);
+    List<AudioBookStat> findAllByTypeAndMonthKeyBetween(StatType type, YearMonth start, YearMonth end);
+
 }
