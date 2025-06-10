@@ -12,10 +12,12 @@ import { listAuthors } from "../../../services/AuthorService";
 import { listVoices } from "../../../services/VoiceService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
+import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
 
 const AudioBookUpdate = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   // Main state
   const [audioBook, setAudioBook] = useState({
@@ -88,7 +90,7 @@ const AudioBookUpdate = () => {
         setAllVoices(voicesRes.data.result || []);
         setAllCategories(catsRes.data.result || []);
       } catch (err) {
-        toast.error("Lỗi tải dữ liệu!");
+        toast.error("Error load data");
         console.error(err);
       }
     };
@@ -171,6 +173,7 @@ const AudioBookUpdate = () => {
   // Update handler
   const handleUpdate = async () => {
     try {
+      setLoading(true);
       // Handle image upload if new image selected
       let imageUrl = audioBook.image;
       if (imageFile) {
@@ -222,18 +225,23 @@ const AudioBookUpdate = () => {
         image: imageUrl,
       };
 
-      await updateAudiobook(id, payload);
-      toast.success("Cập nhật thành công!");
-      navigate("/audiobooks");
+      const response = await updateAudiobook(id, payload);
+      if (response.data.code === 1000) {
+        toast.success("Update successfully!");
+        navigate("/audiobooks");
+      }
     } catch (err) {
-      toast.error("Cập nhật thất bại!");
+      toast.error("Update failed!");
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="audiobook-update">
       <ToastContainer position="top-right" autoClose={3000} />
+      {loading && <LoadingOverlay />}
       <h1>Update an audiobook</h1>
       <div className="form-update-audiobook">
         <div className="row">

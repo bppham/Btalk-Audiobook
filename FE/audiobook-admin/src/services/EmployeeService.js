@@ -1,6 +1,6 @@
 import axios from "axios";
-const REST_API_BASE_URL_EMPLOYEE = "http://localhost:8080/employees";
-const REST_API_BASE_URL_ROLES = "http://localhost:8080/roles";
+const REST_API_BASE_URL_EMPLOYEE = `${import.meta.env.VITE_API_BASE_URL}/employees`;
+const REST_API_BASE_URL_ROLES = `${import.meta.env.VITE_API_BASE_URL}/roles`;
 const getAuthHeaders = () => {
   const token = localStorage.getItem("token");
   console.log("token: ", token);

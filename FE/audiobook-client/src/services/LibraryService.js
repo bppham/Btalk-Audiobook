@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const REST_API_BASE_URL_LIBRARY = "http://localhost:8080/libraries";
+const REST_API_BASE_URL_LIBRARY = `${import.meta.env.VITE_API_BASE_URL}/libraries`;
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem("token");

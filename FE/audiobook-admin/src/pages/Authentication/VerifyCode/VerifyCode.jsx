@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { forgetPassword, verifyCode } from "../../../services/AuthService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
 
 const VerifyCode = () => {
   const navigate = useNavigate();
@@ -136,6 +137,7 @@ const VerifyCode = () => {
   return (
     <div className="verify-code-admin">
       <ToastContainer />
+      {loading && <LoadingOverlay />}
       <div className="verify-code-container">
         <div className="verify-code-info">
           <h3>This is the verify code page</h3>

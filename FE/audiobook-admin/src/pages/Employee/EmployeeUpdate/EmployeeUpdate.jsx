@@ -9,10 +9,12 @@ import {
   listRole,
   updateEmployee,
 } from "../../../services/EmployeeService";
+import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
 
 const EmployeeUpdate = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [employee, setEmployee] = useState({
     name: "",
     email: "",
@@ -26,10 +28,15 @@ const EmployeeUpdate = () => {
   // Get employee by id
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await getEmployeeById(id);
-      setEmployee(response.data.result);
+      if (response.data.code === 1000) {
+        setEmployee(response.data.result);
+      }
     } catch (error) {
       console.error("Error fetching employee: " + error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -70,7 +77,9 @@ const EmployeeUpdate = () => {
   const fetchRoles = async () => {
     try {
       const response = await listRole();
-      setAllRoles(response.data.result);
+      if (response.data.code === 1000) {
+        setAllRoles(response.data.result);
+      }
     } catch (error) {
       console.error("Error fetching roles:", error);
       toast.error("Failed to load roles!");
@@ -107,18 +116,26 @@ const EmployeeUpdate = () => {
   const handleUpdate = async () => {
     console.log(employee);
     try {
-      await updateEmployee(employee.id, employee, image);
-      toast.success("Updated successfully!");
-      navigate("/employees");
+      setLoading(true);
+      const response = await updateEmployee(employee.id, employee, image);
+      if (response.data.code === 1000) {
+        toast.success("Updated successfully!");
+        navigate("/employees");
+      } else {
+        toast.error("Update failed!");
+      }
     } catch (error) {
       console.error("Error updating employee:", error);
       toast.error("Update failed!");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="employee-update">
       <ToastContainer position="top-right" autoClose={3000} />
+      {loading && <LoadingOverlay />}
       <h1>Update an employee</h1>
       <div className="form-update-employee">
         <div className="row">

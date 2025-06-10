@@ -1,5 +1,5 @@
 import axios from "axios";
-const REST_API_BASE_URL_VOICE = "http://localhost:8080/voices";
+const REST_API_BASE_URL_VOICE = `${import.meta.env.VITE_API_BASE_URL}/voices`;
 const getAuthHeaders = () => {
   const token = localStorage.getItem("token");
   console.log("token: ", token);

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const REST_API_BASE_URL_RANKING = "http://localhost:8080/ranking";
+const REST_API_BASE_URL_RANKING = `${import.meta.env.VITE_API_BASE_URL}/ranking`;
 
 export const getTopByDay = (date, page = 0, size = 10) =>
   axios.get(`${REST_API_BASE_URL_RANKING}/day`, {

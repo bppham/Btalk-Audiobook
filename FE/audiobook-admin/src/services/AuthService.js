@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const REST_API_BASE_URL_AUTH = "http://localhost:8080/admin/auth";
+const REST_API_BASE_URL_AUTH = `${import.meta.env.VITE_API_BASE_URL}/admin/auth`;
 // login
 export const login = async (email, password) => {
   try {

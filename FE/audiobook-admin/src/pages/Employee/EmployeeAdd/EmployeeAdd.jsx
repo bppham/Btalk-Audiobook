@@ -52,8 +52,9 @@ const EmployeeAdd = () => {
   const fetchRoles = async () => {
     try {
       const response = await listRole();
-      console.log(response);
-      setAllRoles(response.data.result);
+      if (response.data.code === 1000) {
+        setAllRoles(response.data.result);
+      }
     } catch (error) {
       console.error("Error fetching roles:", error);
       toast.error("Failed to load roles!");
@@ -144,7 +145,11 @@ const EmployeeAdd = () => {
         <div className="row">
           <div className="item">
             <label>Avatar</label>
-            <button className="btn-choose-avatar" type="button" onClick={handleButtonClick}>
+            <button
+              className="btn-choose-avatar"
+              type="button"
+              onClick={handleButtonClick}
+            >
               Choose image
             </button>
             <input

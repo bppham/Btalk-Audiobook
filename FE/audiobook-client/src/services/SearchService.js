@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const REST_API_BASE_URL_SEARCH = "http://localhost:8080/audiobooks";
+const REST_API_BASE_URL_SEARCH = `${import.meta.env.VITE_API_BASE_URL}/audiobooks`;
 
 export const search = (keyword, page = 0, size = 10) =>
   axios.get(`${REST_API_BASE_URL_SEARCH}/search`, {

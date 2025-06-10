@@ -1,5 +1,5 @@
 import axios from "axios";
-const REST_API_BASE_URL_AUDIOBOOK = "http://localhost:8080/audiobooks";
+const REST_API_BASE_URL_AUDIOBOOK = `${import.meta.env.VITE_API_BASE_URL}/audiobooks`;
 const getAuthHeaders = () => {
   const token = localStorage.getItem("token");
   return token ? { Authorization: `Bearer ${token}` } : {};

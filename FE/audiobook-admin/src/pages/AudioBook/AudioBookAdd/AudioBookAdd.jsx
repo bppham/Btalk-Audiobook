@@ -9,10 +9,11 @@ import { ToastContainer, toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { uploadAudioFiles, uploadBookCover } from "../../../services/Upload";
+import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
 
 const AudioBookAdd = () => {
   const navigate = useNavigate();
-  
+  const [loading, setLoading] = useState(false);
   // Main state
   const [audioBook, setAudioBook] = useState({
     title: "",
@@ -119,7 +120,7 @@ const AudioBookAdd = () => {
         setAllVoices(voicesRes.data.result || []);
         setAllCategories(catsRes.data.result || []);
       } catch (err) {
-        toast.error("Lỗi tải dữ liệu!");
+        toast.error("Error load data!");
         console.error(err);
       }
     };
@@ -129,6 +130,7 @@ const AudioBookAdd = () => {
   // Handle Submit
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       // Handle image upload
       let imageUrl = null;
       if (imageFile) {
@@ -162,18 +164,23 @@ const AudioBookAdd = () => {
         audioFiles: uploadedAudioFiles,
       };
 
-      await addAudiobook(payload);
-      toast.success("Audiobook added successfully!");
-      navigate("/audiobooks");
+      const response = await addAudiobook(payload);
+      if (response.data.code === 1000) {
+        toast.success("Audiobook added successfully!");
+        navigate("/audiobooks");
+      }
     } catch (err) {
       toast.error("Failed to add audiobook!");
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="audiobook-update">
       <ToastContainer position="top-right" autoClose={3000} />
+      {loading && <LoadingOverlay />}
       <h1>Add an audiobook</h1>
       <div className="form-update-audiobook">
         <div className="row">
@@ -306,7 +313,8 @@ const AudioBookAdd = () => {
                 multiple
               />
               <button
-                type="button" className="btn-choose-files"
+                type="button"
+                className="btn-choose-files"
                 onClick={() => document.getElementById("audioInput").click()}
               >
                 Choose audio files
@@ -337,7 +345,11 @@ const AudioBookAdd = () => {
         </div>
 
         <div className="row">
-          <button type="button" onClick={handleSubmit} className="update-button">
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="update-button"
+          >
             Add Audiobook
           </button>
         </div>

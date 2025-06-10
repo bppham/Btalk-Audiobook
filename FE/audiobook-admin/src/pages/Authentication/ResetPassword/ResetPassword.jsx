@@ -5,6 +5,7 @@ import "./ResetPassword.css";
 import { resetPassword } from "../../../services/AuthService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -55,6 +56,7 @@ const ResetPassword = () => {
   return (
     <div className="reset-password-admin">
       <ToastContainer />
+      {loading && <LoadingOverlay />}
       <div className="reset-password-container">
         <div className="reset-password-info">
           <h3>This is the reset password page</h3>

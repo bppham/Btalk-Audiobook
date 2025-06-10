@@ -1,11 +1,8 @@
-import React, { use, useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./Account.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Swal from "sweetalert2";
 import LoadingOverlay from "../../components/LoadingOverlay/LoadingOverlay";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import {
   changePassword,
   getEmployeeInfo,

@@ -5,10 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { forgetPassword } from "../../../services/AuthService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
 
 const ForgetPassword = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleForgetPassword = async () => {
     if (email.length === 0) {
@@ -16,6 +18,7 @@ const ForgetPassword = () => {
       return;
     }
     try {
+      setLoading(true);
       const response = await forgetPassword(email);
       if (response.code === 1000) {
         toast.success("Success");
@@ -24,12 +27,15 @@ const ForgetPassword = () => {
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="forget-password-admin">
       <ToastContainer />
+      {loading && <LoadingOverlay />}
       <div className="forget-password-container">
         <div className="forget-password-info">
           <h3>This is the forget password page</h3>

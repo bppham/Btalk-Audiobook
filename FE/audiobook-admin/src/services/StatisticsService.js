@@ -1,5 +1,5 @@
 import axios from "axios";
-const REST_API_BASE_URL_STATISTICS = "http://localhost:8080/statistics";
+const REST_API_BASE_URL_STATISTICS = `${import.meta.env.VITE_API_BASE_URL}/statistics`;
 const getAuthHeaders = () => {
   const token = localStorage.getItem("token");
   return token ? { Authorization: `Bearer ${token}` } : {};

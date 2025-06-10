@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const REST_API_BASE_URL_AUTHOR = "http://localhost:8080/authors";
-
+const REST_API_BASE_URL_AUTHOR = `${import.meta.env.VITE_API_BASE_URL}/authors`;
 // Hàm lấy token từ localStorage
 const getAuthHeaders = () => {
   const token = localStorage.getItem("token");

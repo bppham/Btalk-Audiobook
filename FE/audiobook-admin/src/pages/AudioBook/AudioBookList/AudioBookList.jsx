@@ -3,6 +3,7 @@ import "./AudioBookList.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
+import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
 import {
   deleteAudiobook,
   listAudioBook,
@@ -13,27 +14,25 @@ import { getVoice } from "../../../services/VoiceService";
 
 const AudioBookList = () => {
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
   // Show list audiobook
   const [audiobooks, setAudiobooks] = useState([]);
 
   // Get Author and Voice name from id
   const getAuthorName = async (id) => {
-    if (!id) return "Unknown"; // Nếu id không hợp lệ, trả về "Unknown"
-
+    if (!id) return "Unknown";
     try {
-      const response = await getAuthor(id); // Gọi API lấy dữ liệu tác giả
-      console.log(`Author ID ${id}:`, response?.data?.result); // Debug dữ liệu trả về
-      return response?.data?.result?.name || "Unknown"; // Trả về tên tác giả
+      const response = await getAuthor(id);
+      console.log(`Author ID ${id}:`, response?.data?.result);
+      return response?.data?.result?.name || "Unknown";
     } catch (error) {
       console.error(`Error fetching author ${id}:`, error);
-      return "Unknown"; // Trả về giá trị mặc định nếu lỗi
+      return "Unknown";
     }
   };
 
   const getVoiceName = async (id) => {
-    if (!id) return "Unknown"; // Nếu id không hợp lệ, trả về "Unknown"
-
+    if (!id) return "Unknown";
     try {
       const response = await getVoice(id);
       console.log(`Voice ID ${id}:`, response?.data?.result);
@@ -46,41 +45,34 @@ const AudioBookList = () => {
 
   const fetchAudioBooks = async () => {
     try {
+      setLoading(true);
       const response = await listAudioBook();
-      const books = response?.data?.result || [];
-
-      const booksWithAuthors = await Promise.all(
-        books.map(async (book) => {
-          const authorName = book.authorId
-            ? await getAuthorName(book.authorId)
-            : "Unknown";
-          const voiceName = book.voiceId
-            ? await getVoiceName(book.voiceId)
-            : "Unknown";
-          return { ...book, authorName, voiceName }; // Tránh gọi getAuthorName() lần 2
-        })
-      );
-
-      setAudiobooks(booksWithAuthors);
+      if (response.data.code === 1000) {
+        const books = response?.data?.result || [];
+        const booksWithAuthors = await Promise.all(
+          books.map(async (book) => {
+            const authorName = book.authorId
+              ? await getAuthorName(book.authorId)
+              : "Unknown";
+            const voiceName = book.voiceId
+              ? await getVoiceName(book.voiceId)
+              : "Unknown";
+            return { ...book, authorName, voiceName };
+          })
+        );
+        setAudiobooks(booksWithAuthors);
+      }
     } catch (error) {
       console.error("Error fetching audiobooks:", error);
       toast.error("Failed to load audiobooks!");
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchAudioBooks();
   }, []);
-
-  // Preview Image
-  const [imagePreview, setImagePreview] = useState(null);
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImagePreview(imageUrl);
-    }
-  };
 
   // Delete a category
   const handleDelete = async (id) => {
@@ -140,6 +132,7 @@ const AudioBookList = () => {
   return (
     <div className="audiobook-list">
       <ToastContainer position="top-right" autoClose={3000} />
+      {loading && <LoadingOverlay />}
       <h1>Audiobook</h1>
       <div className="audiobook-list-header">
         <div className="title">

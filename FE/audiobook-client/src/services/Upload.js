@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const REST_API_BASE_URL_UPLOAD = "http://localhost:8080/upload";
+const REST_API_BASE_URL_UPLOAD = `${import.meta.env.VITE_API_BASE_URL}/upload`;
 
 // Upload avatar người dùng
 export const uploadAvatar = async (file) => {
