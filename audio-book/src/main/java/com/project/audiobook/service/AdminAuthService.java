@@ -43,6 +43,7 @@ public class AdminAuthService {
         }
 
         String token = jwtUtil.generateToken(employee);
+        String refreshToken = jwtUtil.generateRefreshToken();
 
         LoginResponse response = new LoginResponse();
         response.setToken(token);

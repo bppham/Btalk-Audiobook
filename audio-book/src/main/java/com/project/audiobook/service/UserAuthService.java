@@ -10,16 +10,18 @@ import com.project.audiobook.dto.request.ForgetPassword.ResetPasswordRequest;
 import com.project.audiobook.dto.request.ForgetPassword.VerifyCodeRequest;
 import com.project.audiobook.dto.request.Login.LoginRequest;
 import com.project.audiobook.dto.request.Login.LoginWithGoogleRequest;
+import com.project.audiobook.dto.request.Login.RefreshTokenRequest;
 import com.project.audiobook.dto.request.Login.RegisterRequest;
-import com.project.audiobook.dto.response.Auth.ForgetPasswordResponse;
-import com.project.audiobook.dto.response.Auth.LoginResponse;
-import com.project.audiobook.dto.response.Auth.ResetPasswordResponse;
-import com.project.audiobook.dto.response.Auth.VerifyCodeResponse;
+import com.project.audiobook.dto.response.Auth.*;
 import com.project.audiobook.dto.response.User.UserResponse;
+import com.project.audiobook.entity.BlacklistedToken;
+import com.project.audiobook.entity.RefreshToken;
 import com.project.audiobook.entity.User;
 import com.project.audiobook.exception.AppException;
 import com.project.audiobook.exception.ErrorCode;
 import com.project.audiobook.mapper.UserMapper;
+import com.project.audiobook.repository.BlacklistedTokenRepository;
+import com.project.audiobook.repository.RefreshTokenRepository;
 import com.project.audiobook.repository.UserRepository;
 import com.project.audiobook.enums.AuthProvider;
 import com.project.audiobook.utils.EmailUtil;
@@ -31,6 +33,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -51,6 +54,8 @@ public class UserAuthService {
     final VerifyCodeUtil verifyCodeUtil;
     final EmailUtil emailUtil;
     final UserMapper userMapper;
+    final RefreshTokenRepository refreshTokenRepository;
+    final BlacklistedTokenRepository blacklistedTokenRepository;
 
     // Register
     public UserResponse registerUser(RegisterRequest request) throws IOException {
@@ -83,10 +88,20 @@ public class UserAuthService {
         }
         String token = jwtUtil.generateTokenForUser(user);
 
+        // handle refresh token
+        String refreshTokenString = jwtUtil.generateRefreshToken();
+        RefreshToken refreshToken = new RefreshToken();
+        refreshToken.setToken(refreshTokenString);
+        refreshToken.setCreatedAt(LocalDateTime.now());
+        refreshToken.setExpiresAt(LocalDateTime.now().plusDays(7));
+        refreshToken.setUser(user);
+        refreshTokenRepository.save(refreshToken);
+
         LoginResponse response = new LoginResponse();
         response.setToken(token);
         response.setEmail(user.getEmail());
         response.setName(user.getName());
+        response.setRefreshToken(refreshTokenString);
         return response;
     }
 
@@ -122,11 +137,20 @@ public class UserAuthService {
                         });
 
                 String token = jwtUtil.generateTokenForUser(user);
+                // handle refresh token
+                String refreshTokenString = jwtUtil.generateRefreshToken();
+                RefreshToken refreshToken = new RefreshToken();
+                refreshToken.setToken(refreshTokenString);
+                refreshToken.setCreatedAt(LocalDateTime.now());
+                refreshToken.setExpiresAt(LocalDateTime.now().plusDays(7));
+                refreshToken.setUser(user);
+                refreshTokenRepository.save(refreshToken);
 
                 LoginResponse response = new LoginResponse();
                 response.setToken(token);
                 response.setName(user.getName());
                 response.setEmail(user.getEmail());
+                response.setRefreshToken(refreshTokenString);
                 return response;
             } else {
                 throw new AppException(ErrorCode.UNAUTHORIZED);
@@ -184,5 +208,31 @@ public class UserAuthService {
         ResetPasswordResponse response = new ResetPasswordResponse();
         response.setEmail(user.getEmail());
         return response;
+    }
+
+    @Transactional
+    public RefreshTokenResponse refreshToken (RefreshTokenRequest request) {
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(request.getRefreshToken())
+                .orElseThrow(() -> new AppException(ErrorCode.INVALID_REFRESH_TOKEN));
+        if (refreshToken.getExpiresAt().isBefore(LocalDateTime.now())) {
+            refreshTokenRepository.delete(refreshToken);
+            throw new AppException(ErrorCode.REFRESH_TOKEN_EXPIRED);
+        }
+        User user = refreshToken.getUser();
+        String newAccessToken = jwtUtil.generateTokenForUser(user);
+        RefreshTokenResponse response = new RefreshTokenResponse();
+        response.setToken(newAccessToken);
+        return response;
+    }
+
+    public void logout(String accessToken, RefreshTokenRequest request) {
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(request.getRefreshToken())
+                .orElseThrow(() -> new AppException(ErrorCode.INVALID_REFRESH_TOKEN));
+        if (!accessToken.isEmpty()) {
+            BlacklistedToken blacklistedToken = new BlacklistedToken();
+            LocalDateTime expiresAt = jwtUtil.extractExpiration(accessToken);
+            blacklistedTokenRepository.save(new BlacklistedToken(accessToken, expiresAt));
+        }
+        refreshTokenRepository.delete(refreshToken);
     }
 }

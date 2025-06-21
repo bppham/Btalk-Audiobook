@@ -11,9 +11,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -21,7 +24,7 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    private final long EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 24 giờ
+    private final long EXPIRATION_TIME = 1000 * 60 * 15;
 
     private Key getSignKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
@@ -40,6 +43,10 @@ public class JwtUtil {
     // 👤 Dành cho người dùng thường
     public String generateTokenForUser(User user) {
         return buildToken(user.getEmail(), new ArrayList<>(), user.getId(), user.getName());
+    }
+
+    public String generateRefreshToken() {
+        return UUID.randomUUID().toString();
     }
 
     // 🎯 Build token chung
@@ -92,5 +99,11 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+    public LocalDateTime extractExpiration(String token) {
+        Date expiration = getClaims(token).getExpiration();
+        return expiration.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 }
