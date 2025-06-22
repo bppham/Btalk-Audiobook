@@ -10,21 +10,22 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "refresh_tokens")
+@Table(name = "employee_refresh_tokens")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RefreshToken {
+public class EmployeeRefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
     @Column(nullable = false, unique = true)
     private String token;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

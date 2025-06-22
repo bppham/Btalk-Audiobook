@@ -13,5 +13,5 @@ import java.util.Optional;
 @Repository
 public interface BlacklistedTokenRepository extends JpaRepository<BlacklistedToken, String> {
     boolean existsByToken(String token);
-    void deleteAllByExpiresAtBefore(LocalDateTime time);
+    int deleteByExpiresAtBefore(LocalDateTime now);
 }

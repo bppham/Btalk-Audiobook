@@ -2,6 +2,7 @@ package com.project.audiobook.repository;
 
 import com.project.audiobook.entity.RefreshToken;
 import com.project.audiobook.entity.User;
+import com.project.audiobook.enums.DeviceType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +15,5 @@ public interface RefreshTokenRepository  extends JpaRepository<RefreshToken, Str
     boolean existsByToken(String token);
     void deleteByToken(String token);
     List<RefreshToken> findAllByUser(User user);
+    Optional<RefreshToken> findByUserAndDeviceType(User user, DeviceType deviceType);
 }

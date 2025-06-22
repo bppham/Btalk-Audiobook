@@ -17,6 +17,7 @@ import com.project.audiobook.dto.response.User.UserResponse;
 import com.project.audiobook.entity.BlacklistedToken;
 import com.project.audiobook.entity.RefreshToken;
 import com.project.audiobook.entity.User;
+import com.project.audiobook.enums.DeviceType;
 import com.project.audiobook.exception.AppException;
 import com.project.audiobook.exception.ErrorCode;
 import com.project.audiobook.mapper.UserMapper;
@@ -77,35 +78,44 @@ public class UserAuthService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        // Nếu user có password thì cho login (bất kể authProvider là gì)
         if (user.getPassword() == null) {
             throw new AppException(ErrorCode.ACCOUNT_NO_PASSWORD);
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            System.out.println("Request: " + request.getPassword());
             throw new AppException(ErrorCode.INVALID_CREDENTIALS);
         }
-        String token = jwtUtil.generateTokenForUser(user);
 
-        // handle refresh token
+        // 1. Generate access token
+        String accessToken = jwtUtil.generateTokenForUser(user);
+
+        // 2. Generate refresh token
         String refreshTokenString = jwtUtil.generateRefreshToken();
-        RefreshToken refreshToken = new RefreshToken();
+        DeviceType deviceType = request.getDeviceType() != null ? request.getDeviceType() : DeviceType.WEB;
+
+        // 3. Tìm refresh token theo user + device
+        RefreshToken refreshToken = refreshTokenRepository.findByUserAndDeviceType(user, deviceType)
+                .orElse(new RefreshToken());
+
         refreshToken.setToken(refreshTokenString);
         refreshToken.setCreatedAt(LocalDateTime.now());
         refreshToken.setExpiresAt(LocalDateTime.now().plusDays(7));
+        refreshToken.setSavedAt(LocalDateTime.now());
         refreshToken.setUser(user);
+        refreshToken.setDeviceType(deviceType);
+
         refreshTokenRepository.save(refreshToken);
 
+        // 4. Trả response
         LoginResponse response = new LoginResponse();
-        response.setToken(token);
+        response.setToken(accessToken);
         response.setEmail(user.getEmail());
         response.setName(user.getName());
         response.setRefreshToken(refreshTokenString);
         return response;
     }
 
-    // Login with Google
+    // Login with google
     public LoginResponse loginWithGoogle(LoginWithGoogleRequest request) {
         try {
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier
@@ -114,53 +124,59 @@ public class UserAuthService {
                     .build();
 
             GoogleIdToken idToken = verifier.verify(request.getIdToken());
-            if (idToken != null) {
-                GoogleIdToken.Payload payload = idToken.getPayload();
-                System.out.println("Payload: " + payload);
-                System.out.println("Payload keys and values:");
-                for (String key : payload.keySet()) {
-                    System.out.println(key + " : " + payload.get(key));
-                }
-                String email = payload.getEmail();
-
-                String name = request.getName();
-                String photoURL = request.getPhotoURL();
-
-                User user = userRepository.findByEmail(email)
-                        .orElseGet(() -> {
-                            User newUser = new User();
-                            newUser.setEmail(email);
-                            newUser.setName(name);
-                            newUser.setPhotoURL(photoURL);
-                            newUser.setAuthProvider(AuthProvider.GOOGLE);
-                            return userRepository.save(newUser);
-                        });
-
-                String token = jwtUtil.generateTokenForUser(user);
-                // handle refresh token
-                String refreshTokenString = jwtUtil.generateRefreshToken();
-                RefreshToken refreshToken = new RefreshToken();
-                refreshToken.setToken(refreshTokenString);
-                refreshToken.setCreatedAt(LocalDateTime.now());
-                refreshToken.setExpiresAt(LocalDateTime.now().plusDays(7));
-                refreshToken.setUser(user);
-                refreshTokenRepository.save(refreshToken);
-
-                LoginResponse response = new LoginResponse();
-                response.setToken(token);
-                response.setName(user.getName());
-                response.setEmail(user.getEmail());
-                response.setRefreshToken(refreshTokenString);
-                return response;
-            } else {
+            if (idToken == null) {
                 throw new AppException(ErrorCode.UNAUTHORIZED);
             }
+
+            GoogleIdToken.Payload payload = idToken.getPayload();
+            String email = payload.getEmail();
+            String name = request.getName();
+            String photoURL = request.getPhotoURL();
+
+            // Tìm hoặc tạo mới user
+            User user = userRepository.findByEmail(email)
+                    .orElseGet(() -> {
+                        User newUser = new User();
+                        newUser.setEmail(email);
+                        newUser.setName(name);
+                        newUser.setPhotoURL(photoURL);
+                        newUser.setAuthProvider(AuthProvider.GOOGLE);
+                        return userRepository.save(newUser);
+                    });
+
+            // Tạo access token
+            String token = jwtUtil.generateTokenForUser(user);
+
+            // Lấy deviceType hoặc fallback mặc định là WEB
+            DeviceType deviceType = request.getDeviceType() != null ? request.getDeviceType() : DeviceType.WEB;
+
+            // Tìm token cũ theo user + device
+            RefreshToken refreshToken = refreshTokenRepository.findByUserAndDeviceType(user, deviceType)
+                    .orElse(new RefreshToken());
+
+            refreshToken.setToken(jwtUtil.generateRefreshToken());
+            refreshToken.setUser(user);
+            refreshToken.setDeviceType(deviceType);
+            refreshToken.setCreatedAt(LocalDateTime.now());
+            refreshToken.setExpiresAt(LocalDateTime.now().plusDays(7));
+            refreshToken.setSavedAt(LocalDateTime.now());
+            refreshTokenRepository.save(refreshToken);
+
+            // Trả kết quả
+            LoginResponse response = new LoginResponse();
+            response.setToken(token);
+            response.setName(user.getName());
+            response.setEmail(user.getEmail());
+            response.setRefreshToken(refreshToken.getToken());
+
+            return response;
 
         } catch (Exception e) {
             e.printStackTrace();
             throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     public ForgetPasswordResponse forgetPassword(ForgetPasswordRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
@@ -195,7 +211,7 @@ public class UserAuthService {
         return response;
     }
 
-    public ResetPasswordResponse resetPassword (ResetPasswordRequest request) {
+    public ResetPasswordResponse resetPassword(ResetPasswordRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
@@ -211,7 +227,7 @@ public class UserAuthService {
     }
 
     @Transactional
-    public RefreshTokenResponse refreshToken (RefreshTokenRequest request) {
+    public RefreshTokenResponse refreshToken(RefreshTokenRequest request) {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(request.getRefreshToken())
                 .orElseThrow(() -> new AppException(ErrorCode.INVALID_REFRESH_TOKEN));
         if (refreshToken.getExpiresAt().isBefore(LocalDateTime.now())) {
@@ -229,7 +245,6 @@ public class UserAuthService {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(request.getRefreshToken())
                 .orElseThrow(() -> new AppException(ErrorCode.INVALID_REFRESH_TOKEN));
         if (!accessToken.isEmpty()) {
-            BlacklistedToken blacklistedToken = new BlacklistedToken();
             LocalDateTime expiresAt = jwtUtil.extractExpiration(accessToken);
             blacklistedTokenRepository.save(new BlacklistedToken(accessToken, expiresAt));
         }
