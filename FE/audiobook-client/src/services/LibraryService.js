@@ -1,25 +1,11 @@
-import axios from "axios";
-
-const REST_API_BASE_URL_LIBRARY = `${import.meta.env.VITE_API_BASE_URL}/libraries`;
-
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
-};
+import api from "../interceptor/axiosAuth";
 
 export const getAllFromLibrary = () =>
-  axios.get(REST_API_BASE_URL_LIBRARY, { headers: getAuthHeaders() });
+  api.get("/libraries");
 
 export const saveToLibrary = (audioBookId) =>
-  axios.post(
-    `${REST_API_BASE_URL_LIBRARY}/save`,
-    { audioBookId },
-    { headers: getAuthHeaders() }
-  );
+  api.post("/libraries/save", { audioBookId });
 
 export const removeFromLibrary = (audioBookId) =>
-  axios.post(
-    `${REST_API_BASE_URL_LIBRARY}/remove`,
-    { audioBookId },
-    { headers: getAuthHeaders() }
-  );
+  api.post("/libraries/remove", { audioBookId });
+

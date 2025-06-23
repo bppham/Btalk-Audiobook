@@ -1,69 +1,64 @@
-import axios from "axios";
-const REST_API_BASE_URL_AUTH = `${import.meta.env.VITE_API_BASE_URL}/user/auth`;
+import apiBase from "../interceptor/axiosBase";  // ❌ Dùng cho public API (login, register...)
+import api from "../interceptor/axiosAuth";      // ✅ Dùng cho protected API (logout...)
 
-// register
+const REST_API_BASE_URL_AUTH = "/user/auth"; // dùng relative path cho gọn
+
+// ✅ Đăng ký
 export const register = (request) =>
-  axios.post(REST_API_BASE_URL_AUTH + "/register", request);
-// login
+  apiBase.post(`${REST_API_BASE_URL_AUTH}/register`, request);
+
+// ✅ Đăng nhập
 export const login = async (request) => {
-  try {
-    const response = await axios.post(
-      `${REST_API_BASE_URL_AUTH}/login`,
-      request
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiBase.post(
+    `${REST_API_BASE_URL_AUTH}/login`,
+    request,
+    { withCredentials: true } // để backend set cookie
+  );
+  return response.data;
 };
-// login with google
+
+// ✅ Đăng nhập bằng Google
 export const loginWithGoogle = async (idToken, name, photoURL) => {
-  try {
-    const response = await axios.post(
-      `${REST_API_BASE_URL_AUTH}/loginWithGoogle`,
-      {
-        idToken,
-        name,
-        photoURL,
-      }
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiBase.post(
+    `${REST_API_BASE_URL_AUTH}/loginWithGoogle`,
+    { idToken, name, photoURL },
+    { withCredentials: true }
+  );
+  return response.data;
 };
-// forget password
+
+// ✅ Gửi email quên mật khẩu
 export const forgetPassword = async (email) => {
-  try {
-    const response = await axios.post(
-      `${REST_API_BASE_URL_AUTH}/forget-password`,
-      { email }
-    );
-    return response.data;
-  } catch (error) {
-    throw error.message;
-  }
+  const response = await apiBase.post(
+    `${REST_API_BASE_URL_AUTH}/forget-password`,
+    { email }
+  );
+  return response.data;
 };
-// verify code
+
+// ✅ Xác thực mã OTP
 export const verifyCode = async (email, otp) => {
-  try {
-    const response = await axios.post(
-      `${REST_API_BASE_URL_AUTH}/verify-code`,
-      { email, code: otp }
-    );
-    return response.data;
-  } catch (error) {
-    throw error.message;
-  }
+  const response = await apiBase.post(
+    `${REST_API_BASE_URL_AUTH}/verify-code`,
+    { email, code: otp }
+  );
+  return response.data;
 };
+
+// ✅ Đặt lại mật khẩu mới
 export const resetPassword = async (email, password) => {
-  try {
-    const response = await axios.put(
-      `${REST_API_BASE_URL_AUTH}/reset-password`,
-      { email, password}
-    );
-    return response.data;
-  } catch (error) {
-    throw error.message;
-  }
+  const response = await apiBase.put(
+    `${REST_API_BASE_URL_AUTH}/reset-password`,
+    { email, password }
+  );
+  return response.data;
+};
+
+// ✅ Đăng xuất
+export const logout = async () => {
+  return await api.post(
+    `${REST_API_BASE_URL_AUTH}/logout`,
+    {}, // body rỗng
+    { withCredentials: true } // để gửi cookie chứa refreshToken
+  );
 };

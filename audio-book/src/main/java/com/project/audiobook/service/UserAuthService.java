@@ -227,27 +227,36 @@ public class UserAuthService {
     }
 
     @Transactional
-    public RefreshTokenResponse refreshToken(RefreshTokenRequest request) {
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(request.getRefreshToken())
+    public RefreshTokenResponse refreshToken(String refreshTokenStr) {
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(refreshTokenStr)
                 .orElseThrow(() -> new AppException(ErrorCode.INVALID_REFRESH_TOKEN));
+        System.out.println("🔍 Cookie nhận được: " + refreshTokenStr);
+
         if (refreshToken.getExpiresAt().isBefore(LocalDateTime.now())) {
             refreshTokenRepository.delete(refreshToken);
             throw new AppException(ErrorCode.REFRESH_TOKEN_EXPIRED);
         }
+
         User user = refreshToken.getUser();
         String newAccessToken = jwtUtil.generateTokenForUser(user);
         RefreshTokenResponse response = new RefreshTokenResponse();
         response.setToken(newAccessToken);
         return response;
     }
-
-    public void logout(String accessToken, RefreshTokenRequest request) {
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(request.getRefreshToken())
-                .orElseThrow(() -> new AppException(ErrorCode.INVALID_REFRESH_TOKEN));
-        if (!accessToken.isEmpty()) {
+    @Transactional
+    public void logout(String accessToken, String refreshTokenStr) {
+        if (accessToken != null && !accessToken.isEmpty()) {
             LocalDateTime expiresAt = jwtUtil.extractExpiration(accessToken);
             blacklistedTokenRepository.save(new BlacklistedToken(accessToken, expiresAt));
         }
-        refreshTokenRepository.delete(refreshToken);
+
+        // Tránh lỗi nếu không tìm thấy token
+        if (refreshTokenRepository.existsByToken(refreshTokenStr)) {
+            refreshTokenRepository.deleteByToken(refreshTokenStr);
+            System.out.println("RefreshToken deleted: " + refreshTokenStr);
+        } else {
+            System.out.println("RefreshToken not found in DB: " + refreshTokenStr);
+        }
     }
+
 }

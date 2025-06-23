@@ -1,33 +1,32 @@
-import axios from "axios";
-
-const REST_API_BASE_URL_RANKING = `${import.meta.env.VITE_API_BASE_URL}/ranking`;
+// src/services/RankingService.js
+import api from "../interceptor/axiosBase";
 
 export const getTopByDay = (date, page = 0, size = 10) =>
-  axios.get(`${REST_API_BASE_URL_RANKING}/day`, {
+  api.get("/ranking/day", {
     params: { date, page, size },
   });
 
 export const getTopByMonth = (month, page = 0, size = 10) =>
-  axios.get(`${REST_API_BASE_URL_RANKING}/month`, {
+  api.get("/ranking/month", {
     params: { month, page, size },
   });
 
 export const getTopByYear = (year, page = 0, size = 10) =>
-  axios.get(`${REST_API_BASE_URL_RANKING}/year`, {
+  api.get("/ranking/year", {
     params: { year, page, size },
   });
 
 export const getTopByAll = (page = 0, size = 10) =>
-  axios.get(`${REST_API_BASE_URL_RANKING}/all`, {
+  api.get("/ranking/all", {
     params: { page, size },
   });
 
 export const getTopByLikes = (page = 0, size = 10) =>
-  axios.get(`${REST_API_BASE_URL_RANKING}/likes`, {
+  api.get("/ranking/likes", {
     params: { page, size },
   });
 
 export const getTopByRating = (page = 0, size = 10) =>
-  axios.get(`${REST_API_BASE_URL_RANKING}/rating`, {
+  api.get("/ranking/rating", {
     params: { page, size },
   });

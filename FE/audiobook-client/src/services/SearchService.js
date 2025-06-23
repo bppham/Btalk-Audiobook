@@ -1,13 +1,12 @@
-import axios from "axios";
-
-const REST_API_BASE_URL_SEARCH = `${import.meta.env.VITE_API_BASE_URL}/audiobooks`;
+// src/services/SearchService.js
+import api from "../interceptor/axiosBase";
 
 export const search = (keyword, page = 0, size = 10) =>
-  axios.get(`${REST_API_BASE_URL_SEARCH}/search`, {
+  api.get("/audiobooks/search", {
     params: { keyword, page, size },
   });
 
 export const filterCategory = (id, page = 0, size = 10) =>
-  axios.get(`${REST_API_BASE_URL_SEARCH}/filter/category/${id}`, {
+  api.get(`/audiobooks/filter/category/${id}`, {
     params: { page, size },
   });

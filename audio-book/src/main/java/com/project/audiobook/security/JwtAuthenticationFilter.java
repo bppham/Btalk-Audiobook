@@ -27,7 +27,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.blacklistedTokenRepository = blacklistedTokenRepository;
     }
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -36,29 +37,39 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(7);
-        // ⚠️ Check blacklist
+
+        // Check blacklist
         if (blacklistedTokenRepository.existsByToken(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.getWriter().write("{\"message\": \"Token is blacklisted\"}");
             return;
         }
-        String email = jwtUtil.extractEmail(token);
-        List<String> roles = jwtUtil.extractRoles(token);
 
-        System.out.println("Email: " + email);
-        System.out.println("Roles: " + roles);
+        String email = null;
+        List<String> roles = List.of();
+
+        try {
+            email = jwtUtil.extractEmail(token);
+            roles = jwtUtil.extractRoles(token);
+        } catch (io.jsonwebtoken.ExpiredJwtException ex) {
+            // Token hết hạn → Cho qua để frontend xử lý tự refresh
+            filterChain.doFilter(request, response);
+            return;
+        } catch (Exception ex) {
+            // Token sai format, signature... → chặn
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"message\": \"Invalid token\"}");
+            return;
+        }
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             var authorities = roles.stream()
-                    .map(SimpleGrantedAuthority::new) // giữ nguyên role trong token
+                    .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
 
-            var authToken = new UsernamePasswordAuthenticationToken(
-                    email,
-                    null,
-                    authorities
-            );
+            var authToken = new UsernamePasswordAuthenticationToken(email, null, authorities);
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             SecurityContextHolder.getContext().setAuthentication(authToken);

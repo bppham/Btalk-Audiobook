@@ -44,6 +44,7 @@ public enum ErrorCode {
     WRONG_OLD_PASSWORD(6006, "Old password is not correct"),
     INVALID_REFRESH_TOKEN(6007, "Refresh token is not valid"),
     REFRESH_TOKEN_EXPIRED(6008, "Refresh token is expired"),
+    REFRESH_TOKEN_REQUIRED(6009, "Refresh token required"),
     // User
     USER_EXISTED(7001, "User already existed"),
     USER_BLANK(7002, "User cannot be blank"),

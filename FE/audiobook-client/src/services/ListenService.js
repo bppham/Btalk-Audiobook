@@ -1,21 +1,11 @@
-import axios from "axios";
-
-const REST_API_BASE_URL_LISTEN = `${import.meta.env.VITE_API_BASE_URL}/listen`;
-
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
-};
+// src/services/ListenService.js
+import api from "../interceptor/axiosAuth";
 
 export const increaseView = (audioBookId) =>
-  axios.post(`${REST_API_BASE_URL_LISTEN}/${audioBookId}`, {}, {});
+  api.post(`/listen/${audioBookId}`);
 
 export const saveListeningHistory = (audioBookId) =>
-  axios.post(
-    `${REST_API_BASE_URL_LISTEN}/${audioBookId}/history`,
-    {},
-    { headers: getAuthHeaders() }
-  );
+  api.post(`/listen/${audioBookId}/history`);
 
 export const getAllFromHistory = () =>
-  axios.get(REST_API_BASE_URL_LISTEN, { headers: getAuthHeaders() });
+  api.get("/listen");

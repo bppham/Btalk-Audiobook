@@ -1,7 +1,8 @@
-import axios from "axios";
-const REST_API_BASE_URL_CATEGORY = `${import.meta.env.VITE_API_BASE_URL}/categories`;
-// get all categories
-export const listCategories = () => axios.get(REST_API_BASE_URL_CATEGORY);
-// add a category
-export const getCategory = (categoryId) =>
-  axios.get(REST_API_BASE_URL_CATEGORY + "/" + categoryId);
+// src/services/CategoryService.js
+import api from "../interceptor/axiosBase";
+
+// Lấy toàn bộ danh mục
+export const listCategories = () => api.get("/categories");
+
+// Lấy chi tiết danh mục theo ID
+export const getCategory = (categoryId) => api.get(`/categories/${categoryId}`);

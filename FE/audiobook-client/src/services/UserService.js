@@ -1,24 +1,9 @@
-import axios from "axios";
+import api from "../interceptor/axiosAuth";
 
-const REST_API_BASE_URL_USER = `${import.meta.env.VITE_API_BASE_URL}/user/info`;
-
-
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
-};
-
-export const getUserInfo = () =>
-  axios.get(`${REST_API_BASE_URL_USER}`, {
-    headers: getAuthHeaders(),
-  });
+export const getUserInfo = () => api.get("/user/info");
 
 export const updateInfo = (request) =>
-  axios.put(`${REST_API_BASE_URL_USER}/update`, request, {
-    headers: getAuthHeaders(),
-  });
+  api.put("/user/info/update", request);
 
-  export const changePassword = (request) =>
-  axios.put(`${REST_API_BASE_URL_USER}/change-password`, request, {
-    headers: getAuthHeaders(),
-  });
+export const changePassword = (request) =>
+  api.put("/user/info/change-password", request);

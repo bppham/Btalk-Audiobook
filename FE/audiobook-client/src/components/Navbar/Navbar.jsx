@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faCircleUser, faCircleLeft } from "@fortawesome/free-regular-svg-icons";
+import {
+  faBookmark,
+  faCircleUser,
+  faCircleLeft,
+} from "@fortawesome/free-regular-svg-icons";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -61,8 +65,8 @@ const Navbar = () => {
                   <FontAwesomeIcon icon={faCircleUser} /> Tài khoản
                 </Link>
                 <div
-                  onClick={() => {
-                    logout();
+                  onClick={async () => {
+                    await logout(); 
                     setShowDropdown(false);
                     navigate("/");
                   }}

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getUserInfo } from "../services/UserService";
-
+import { logout as logoutAPI} from "../services/Auth";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -9,14 +9,17 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (token) {
       getUserInfo()
         .then((res) => {
           setUser(res.data.result);
         })
-        .catch(() => {
-          localStorage.removeItem("token");
-          setUser(null);
+        .catch((err) => {
+          console.warn("Get user failed:", err);
+          // ❗ KHÔNG xóa token ở đây
+          // Đợi interceptor xử lý refresh. Nếu thất bại thật sự (ví dụ do /refresh trả lỗi),
+          // bạn có thể logout ở đó (ví dụ: trong interceptor hoặc sau này thêm retry logic)
         })
         .finally(() => {
           setLoading(false);
@@ -26,9 +29,15 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
+  const logout = async () => {
+    try {
+      await logoutAPI(); 
+    } catch (err) {
+      console.error("Logout API failed", err);
+    } finally {
+      localStorage.removeItem("token");
+      setUser(null);
+    }
   };
 
   return (
