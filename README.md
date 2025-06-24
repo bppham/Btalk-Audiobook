@@ -4,6 +4,16 @@ This project includes two main interfaces: **Client Site** for users and **Admin
 
 ---
 
+## 🧰 Technology Stack
+
+- **Backend:** Spring Boot  
+- **Frontend:** ReactJS  
+- **Database:** SQL Server  
+- **Cloud Storage:** Cloudinary (image, audio uploads)  
+- **Authentication:** Firebase (OAuth2 with Google)
+
+---
+
 ## 🌐 Client Site Features
 
 ### 1. 🔐 Authentication
