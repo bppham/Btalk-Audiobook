@@ -145,13 +145,13 @@ const Category = () => {
           const response = await deleteCategory(id);
           if (response.code.data === 1000) {
             toast.success("Category deleted successfully!");
-            fetchCategories();
           }
         } catch (error) {
           showError(error.response.data.code);
           toast.error("Failed to delete category!");
         } finally {
           setLoading(false);
+          fetchCategories();
         }
       }
     });

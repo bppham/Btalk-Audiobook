@@ -1,5 +1,5 @@
-import apiBase from "../interceptor/axiosBase";  // ❌ Dùng cho public API (login, register...)
-import api from "../interceptor/axiosAuth";      // ✅ Dùng cho protected API (logout...)
+import apiBase from "../interceptor/axiosBase"; 
+import api from "../interceptor/axiosAuth";  
 
 const REST_API_BASE_URL_AUTH = "/user/auth"; // dùng relative path cho gọn
 

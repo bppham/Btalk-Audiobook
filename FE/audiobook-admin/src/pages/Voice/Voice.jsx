@@ -150,12 +150,12 @@ const Voice = () => {
           const response = await deleteVoice(id);
           if (response.code.data === 1000) {
             toast.success("Voice deleted successfully!");
-            fetchVoices();
           }
         } catch (error) {
           showError(error.response.data.code);
         } finally {
           setLoading(false);
+          fetchVoices();
         }
       }
     });

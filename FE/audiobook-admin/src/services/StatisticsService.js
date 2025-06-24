@@ -1,29 +1,19 @@
-import axios from "axios";
-const REST_API_BASE_URL_STATISTICS = `${import.meta.env.VITE_API_BASE_URL}/statistics`;
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
-};
+import api from "../interceptor/axiosAuth";
+const REST_API_BASE_URL_STATISTICS = `${
+  import.meta.env.VITE_API_BASE_URL
+}/statistics`;
 // get total users
 export const getTotalUsers = () =>
-  axios.get(`${REST_API_BASE_URL_STATISTICS}/user/count`, {
-    headers: getAuthHeaders(),
-  });
+  api.get(`${REST_API_BASE_URL_STATISTICS}/user/count`);
 
 // get total audiobooks
 export const getTotalAudiobooks = () =>
-  axios.get(`${REST_API_BASE_URL_STATISTICS}/audiobook/count`, {
-    headers: getAuthHeaders(),
-  });
+  api.get(`${REST_API_BASE_URL_STATISTICS}/audiobook/count`);
 
 // get all listens count
 export const getAllListensCountThisYear = () =>
-  axios.get(`${REST_API_BASE_URL_STATISTICS}/audiobook/listen-count/yearly`, {
-    headers: getAuthHeaders(),
-  });
+  api.get(`${REST_API_BASE_URL_STATISTICS}/audiobook/listen-count/yearly`);
 
 // get all listens count monthly
 export const getAllMonthListenCount = () =>
-  axios.get(`${REST_API_BASE_URL_STATISTICS}/audiobook/listen-count/by-month`, {
-    headers: getAuthHeaders(),
-  });
+  api.get(`${REST_API_BASE_URL_STATISTICS}/audiobook/listen-count/by-month`);

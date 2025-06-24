@@ -39,8 +39,8 @@ const Navbar = () => {
                 <FontAwesomeIcon icon={faCircleUser} /> Account
               </Link>
               <div
-                onClick={() => {
-                  logout();
+                onClick={async () => {
+                  await logout();
                   setShowDropdown(false);
                   navigate("/");
                 }}

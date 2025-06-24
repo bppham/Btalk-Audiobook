@@ -1,49 +1,47 @@
-import axios from "axios";
-const REST_API_BASE_URL_AUTH = `${import.meta.env.VITE_API_BASE_URL}/admin/auth`;
+import apiBase from "../interceptor/axiosBase";
+import api from "../interceptor/axiosAuth";
+const REST_API_BASE_URL_AUTH = `${
+  import.meta.env.VITE_API_BASE_URL
+}/admin/auth`;
 // login
-export const login = async (email, password) => {
-  try {
-    const response = await axios.post(`${REST_API_BASE_URL_AUTH}/login`, {
-      email,
-      password,
-    });
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+export const login = async (request) => {
+  const response = await apiBase.post(
+    `${REST_API_BASE_URL_AUTH}/login`,
+    request,
+    { withCredentials: true } // để backend set cookie
+  );
+  return response.data;
 };
 // forget password
 export const forgetPassword = async (email) => {
-  try {
-    const response = await axios.post(
-      `${REST_API_BASE_URL_AUTH}/forget-password`,
-      { email }
-    );
-    return response.data;
-  } catch (error) {
-    throw error.message;
-  }
+  const response = await apiBase.post(
+    `${REST_API_BASE_URL_AUTH}/forget-password`,
+    { email }
+  );
+  return response.data;
 };
 // verify code
 export const verifyCode = async (email, otp) => {
-  try {
-    const response = await axios.post(
-      `${REST_API_BASE_URL_AUTH}/verify-code`,
-      { email, code: otp }
-    );
-    return response.data;
-  } catch (error) {
-    throw error.message;
-  }
+  const response = await apiBase.post(`${REST_API_BASE_URL_AUTH}/verify-code`, {
+    email,
+    code: otp,
+  });
+  return response.data;
 };
+// ✅ Đặt lại mật khẩu mới
 export const resetPassword = async (email, password) => {
-  try {
-    const response = await axios.put(
-      `${REST_API_BASE_URL_AUTH}/reset-password`,
-      { email, password}
-    );
-    return response.data;
-  } catch (error) {
-    throw error.message;
-  }
+  const response = await apiBase.put(
+    `${REST_API_BASE_URL_AUTH}/reset-password`,
+    { email, password }
+  );
+  return response.data;
+};
+
+// ✅ Đăng xuất
+export const logout = async () => {
+  return await api.post(
+    `${REST_API_BASE_URL_AUTH}/logout`,
+    {}, // body rỗng
+    { withCredentials: true } // để gửi cookie chứa refreshToken
+  );
 };

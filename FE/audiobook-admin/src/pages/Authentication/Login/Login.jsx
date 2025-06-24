@@ -19,7 +19,11 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       setLoading(true);
-      const response = await login(email, password);
+      const request = {
+        email,
+        password
+      };
+      const response = await login(request);
 
       if (response.code === 1000) {
         const token = response.result.token;

@@ -1,29 +1,16 @@
-import axios from "axios";
+import apiBase from "../interceptor/axiosBase";
+import api from "../interceptor/axiosAuth";
 const REST_API_BASE_URL_VOICE = `${import.meta.env.VITE_API_BASE_URL}/voices`;
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
-  console.log("token: ", token);
-  return token ? { Authorization: `Bearer ${token}` } : {};
-};
 // get all voices
-export const listVoices = () => axios.get(REST_API_BASE_URL_VOICE);
+export const listVoices = () => apiBase.get(REST_API_BASE_URL_VOICE);
 // add a voice
-export const addVoice = (voice) =>
-  axios.post(REST_API_BASE_URL_VOICE, voice, {
-    headers: getAuthHeaders(),
-  });
+export const addVoice = (voice) => api.post(REST_API_BASE_URL_VOICE, voice);
 // get voice by id
 export const getVoice = (voiceId) =>
-  axios.get(REST_API_BASE_URL_VOICE + "/" + voiceId, {
-    headers: getAuthHeaders(),
-  });
+  api.get(REST_API_BASE_URL_VOICE + "/" + voiceId);
 // update
 export const updateVoice = (voiceId, voice) =>
-  axios.put(REST_API_BASE_URL_VOICE + "/" + voiceId, voice, {
-    headers: getAuthHeaders(),
-  });
+  api.put(REST_API_BASE_URL_VOICE + "/" + voiceId, voice);
 // delete
 export const deleteVoice = (voiceId) =>
-  axios.delete(REST_API_BASE_URL_VOICE + "/" + voiceId, {
-    headers: getAuthHeaders(),
-  });
+  api.delete(REST_API_BASE_URL_VOICE + "/" + voiceId);

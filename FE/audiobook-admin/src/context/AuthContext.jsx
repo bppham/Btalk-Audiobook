@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getEmployeeInfo } from "../services/AccountService";
+import { logout as logoutAPI } from "../services/AuthService";
 
 const AuthContext = createContext();
 
@@ -15,7 +16,6 @@ export const AuthProvider = ({ children }) => {
           setUser(res.data.result);
         })
         .catch(() => {
-          localStorage.removeItem("token");
           setUser(null);
         })
         .finally(() => {
@@ -26,9 +26,15 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
+  const logout = async () => {
+    try {
+      await logoutAPI();
+    } catch (err) {
+      console.error("Logout API failed", err);
+    } finally {
+      localStorage.removeItem("token");
+      setUser(null);
+    }
   };
 
   return (

@@ -1,36 +1,22 @@
-import axios from "axios";
+import api from "../interceptor/axiosAuth";
+import apiBase from "../interceptor/axiosBase";
 
 const REST_API_BASE_URL_AUTHOR = `${import.meta.env.VITE_API_BASE_URL}/authors`;
-// Hàm lấy token từ localStorage
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
-  console.log("token: ", token);
-  return token ? { Authorization: `Bearer ${token}` } : {};
-};
 
 // GET all authors (cần token vì Spring yêu cầu authenticated())
-export const listAuthors = () => axios.get(REST_API_BASE_URL_AUTHOR);
+export const listAuthors = () => apiBase.get(REST_API_BASE_URL_AUTHOR);
 
 // ADD author
-export const addAuthor = (author) =>
-  axios.post(REST_API_BASE_URL_AUTHOR, author, {
-    headers: getAuthHeaders(),
-  });
+export const addAuthor = (author) => api.post(REST_API_BASE_URL_AUTHOR, author);
 
 // GET author by ID
 export const getAuthor = (authorId) =>
-  axios.get(`${REST_API_BASE_URL_AUTHOR}/${authorId}`, {
-    headers: getAuthHeaders(),
-  });
+  api.get(`${REST_API_BASE_URL_AUTHOR}/${authorId}`);
 
 // UPDATE author
 export const updateAuthor = (authorId, author) =>
-  axios.put(`${REST_API_BASE_URL_AUTHOR}/${authorId}`, author, {
-    headers: getAuthHeaders(),
-  });
+  api.put(`${REST_API_BASE_URL_AUTHOR}/${authorId}`, author);
 
 // DELETE author
 export const deleteAuthor = (authorId) =>
-  axios.delete(`${REST_API_BASE_URL_AUTHOR}/${authorId}`, {
-    headers: getAuthHeaders(),
-  });
+  api.delete(`${REST_API_BASE_URL_AUTHOR}/${authorId}`);

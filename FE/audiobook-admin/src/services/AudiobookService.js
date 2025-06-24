@@ -1,34 +1,21 @@
-import axios from "axios";
-const REST_API_BASE_URL_AUDIOBOOK = `${import.meta.env.VITE_API_BASE_URL}/audiobooks`;
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
-  console.log("token: ", token);
-  return token ? { Authorization: `Bearer ${token}` } : {};
-};
+import api from "../interceptor/axiosAuth";
+import apiBase from "../interceptor/axiosBase";
+const REST_API_BASE_URL_AUDIOBOOK = `${
+  import.meta.env.VITE_API_BASE_URL
+}/audiobooks`;
 // get all employees
-export const listAudioBook = () =>
-  axios.get(REST_API_BASE_URL_AUDIOBOOK, {
-    headers: getAuthHeaders(),
-  });
+export const listAudioBook = () => apiBase.get(REST_API_BASE_URL_AUDIOBOOK);
 // add a employee
 export const addAudiobook = (audiobook) =>
-  axios.post(REST_API_BASE_URL_AUDIOBOOK, audiobook, {
-    headers: getAuthHeaders(),
-  });
+  api.post(REST_API_BASE_URL_AUDIOBOOK, audiobook);
 // get by id
 export const getAudiobookById = (id) =>
-  axios.get(`${REST_API_BASE_URL_AUDIOBOOK}/${id}`, {
-    headers: getAuthHeaders(),
-  });
+  api.get(`${REST_API_BASE_URL_AUDIOBOOK}/${id}`);
 
 // update
 export const updateAudiobook = (id, audioBook) =>
-  axios.put(`${REST_API_BASE_URL_AUDIOBOOK}/${id}`, audioBook, {
-    headers: getAuthHeaders(),
-  });
+  api.put(`${REST_API_BASE_URL_AUDIOBOOK}/${id}`, audioBook);
 
 // delete
 export const deleteAudiobook = (id) =>
-  axios.delete(`${REST_API_BASE_URL_AUDIOBOOK}/${id}`, {
-    headers: getAuthHeaders(),
-  });
+  api.delete(`${REST_API_BASE_URL_AUDIOBOOK}/${id}`);

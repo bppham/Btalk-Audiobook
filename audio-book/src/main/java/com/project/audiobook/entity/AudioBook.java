@@ -32,10 +32,10 @@ public class AudioBook {
     @JoinColumn(name = "voice_id")
     private Voice voice;
 
-    @Column(columnDefinition = "NVARCHAR(255)")
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     private String description;
 
-    @Column(columnDefinition = "NVARCHAR(255)")
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     private String note;
 
     @ManyToMany
@@ -61,4 +61,9 @@ public class AudioBook {
     @Column(nullable = false)
     private Long listenCount = 0L;
 
+    @OneToMany(mappedBy = "audioBook", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AudioBookStat> stats = new ArrayList<>();
+
+    @OneToMany(mappedBy = "audioBook", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ListenHistory> listenHistories = new ArrayList<>();
 }
